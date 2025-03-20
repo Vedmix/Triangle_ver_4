@@ -1,15 +1,37 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QApplication>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
+MyWindow::MyWindow(QWidget *parent) : QWidget(parent) {
+    setStyleSheet("background-color: white;");
+
+    QPushButton *button1 = new QPushButton("Кнопка 1", this);
+    QPushButton *button2 = new QPushButton("Кнопка 2", this);
+
+    button1->setFixedSize(100, 50);
+    button2->setFixedSize(100, 50);
+
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addWidget(button1);
+    layout->addWidget(button2);
+
+    setLayout(layout);
+
+    setWindowTitle("Triangle");
+
+    showFullScreen();
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+void MyWindow::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Escape) {
+        if (isFullScreen()) {
+            showNormal();
 
+            QScreen *screen = QGuiApplication::primaryScreen();
+            QRect screenGeometry = screen->availableGeometry();
+
+            setGeometry(screenGeometry);
+        }
+    }
+}
