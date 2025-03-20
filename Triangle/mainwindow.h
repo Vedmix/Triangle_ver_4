@@ -5,9 +5,9 @@
 #include <QKeyEvent>
 #include <QScreen>
 
-class MyWindow : public QWidget {
+class WelcomeWindow : public QWidget {
 public:
-    MyWindow(QWidget *parent = nullptr);
+    WelcomeWindow(QWidget *parent = nullptr);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
