@@ -1,21 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QWidget>
+#include <QKeyEvent>
+#include <QScreen>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-
+class WelcomeWindow : public QWidget {
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    WelcomeWindow(QWidget *parent = nullptr);
 
-private:
-    Ui::MainWindow *ui;
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
-#endif // MAINWINDOW_H
+
+#endif
