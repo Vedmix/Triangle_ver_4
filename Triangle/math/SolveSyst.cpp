@@ -5,103 +5,89 @@
 #include <cmath>
 using namespace std;
 
-int** fileInput(const string& filename, int* n, int* m) {
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cerr << "Не удалось открыть файл!" << endl;
-        return nullptr;
-    }
-
-    file >> *n >> *m;
-
-    int** syst = new int*[*n];
-    for (int i = 0; i < *n; i++) {
-        syst[i] = new int[*m];
-    }
-
-    for (int i = 0; i < *n; i++) {
-        for (int j = 0; j < *m; j++) {
-            file >> syst[i][j];
-        }
-    }
-
-    file.close();
-    return syst;
+SystemOfEquations::SystemOfEquations(int rows, int cols) : Matrix(rows, cols){
+    solves = new double[rows];
 }
 
-int SolveKramerMethod(int** syst, double* solves, int n){
-    int** systForKram = new int*[n];
+SystemOfEquations::SystemOfEquations(const string& filename):Matrix(filename){
+    solves = new double[getRows()];
+}
+
+SystemOfEquations::~SystemOfEquations(){
+    delete[] solves;
+}
+
+double* SystemOfEquations::getSolves(){
+    double* copy = new double[getRows()];
+    for(int i = 0; i < getRows(); i++){
+        copy[i] = solves[i];
+    }
+    return copy;
+}
+
+void SystemOfEquations::printSolves(){
+    int rows = getRows();
+    for(int i=0; i<rows;i++){
+        if(abs(solves[i]) < 1e-9){
+            solves[i] = 0.0;
+        }
+        solves[i]=round(solves[i] * 10000) / 10000;
+        cout << "x" << i+1 << " = " << solves[i] << ' ';
+    }
+    cout << '\n';
+}
+
+void SystemOfEquations::SolveKramerMethod(){
+    int n = getRows();
+    Matrix systForKram(n, n);
     double* dets = new double[n+1];
-    bool success=1;
-    for(int i=0;i<n;i++){
-        systForKram[i] = new int[n];
+
+    for (int i = 0; i < n + 1; i++) {
+        dets[i] = 0.0;
     }
 
     for(int col=0; col<n+1;col++){
         for(int i=0;i<n;i++){
             for(int j=0; j<n;j++){
-                if(!(col==j)){
-                    systForKram[i][j]=syst[i][j];
+                if(col!=j){
+                    systForKram.setElement(i, j, getElement(i, j));
                 }
                 else{
-                    systForKram[i][j] = syst[i][n];
+                    systForKram.setElement(i, j, getElement(i, n));
                 }
             }
         }
-        dets[col] = determinant(systForKram, n);
+        dets[col] = systForKram.determinant();
+        if(abs(dets[col]) < 1e-9){
+            dets[col] = 0.0;
+        }
         if(dets[col]==0 && col==n){
-            return 0;
-            break;
+            success=0;
+            return;
         }
     }
-
     for(int i=0; i<n;i++){
         solves[i] = dets[i]/dets[n];
     }
-
-    for (int i = 0; i < n; i++) {
-        delete[] systForKram[i];
-    }
-    delete[] systForKram;
-
-    return 1;
 }
 
-int main() {
-    int countCols;
-    int n = 0;
-    int m = 0;
-    int** syst = fileInput("input.txt", &n, &m);
-    double* solves = new double[n];
-    bool success;
+bool SystemOfEquations::isSuccess(){return success;}
 
-    if (syst == nullptr) {
-        cout << "Ошибка ввода" <<endl;
-        return 1;
-    }
-
+void SystemOfEquations::Solve(){
+    cout << "Введённая система: " << endl;
+    printMartix();
     //Решаем методом Крамера
-    if(m-1==n){
-        success = SolveKramerMethod(syst, solves, n);
+    if(getCols()-1==getRows()){
+        SolveKramerMethod();
     }
-
-    if(!success){
+    else{
+        //тут будет гаусс мб
+        cout << '\n';
+    }
+    if(isSuccess()){
         cout<<"Уравнение имеет бесконечное количество решений, либо не имеет их"<< endl;
     }
     else{
-        for(int i =0; i<n;i++){
-            if(abs(solves[i]) < 1e-9){
-                solves[i] = 0.0;
-            }
-            solves[i]=round(solves[i] * 10000) / 10000;
-            cout << solves[i] <<' ';
-        }
+        cout << "Система решена" << endl;
     }
-
-    for (int i = 0; i < n; i++) {
-        delete[] syst[i];
-    }
-    delete[] syst;
-
-    return 0;
 }

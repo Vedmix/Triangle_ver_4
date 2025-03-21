@@ -5,7 +5,18 @@
 #include <cmath>
 using namespace std;
 
-
-int** fileInput(const string& filename, int* n, int* m);
-
-int SolveKramerMethod(int** syst, int n);
+class SystemOfEquations : public Matrix
+{
+private:
+    double* solves;
+    bool success; //Имеет ли уравнение конечное количество корней
+public:
+    void SolveKramerMethod();
+    double* getSolves();
+    void printSolves();
+    SystemOfEquations(int rows, int cols);
+    SystemOfEquations(const string& filename);
+    ~SystemOfEquations();
+    bool isSuccess();
+    void Solve();
+};
