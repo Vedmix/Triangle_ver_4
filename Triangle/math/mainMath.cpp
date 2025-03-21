@@ -7,8 +7,7 @@ using namespace std;
 
 int main()
 {
-    Matrix syst("input.txt");
-    double det = syst.determinant();
-    cout << det;
+    SystemOfEquations syst("input.txt");
+    syst.Solve();
     return 0;
 }
