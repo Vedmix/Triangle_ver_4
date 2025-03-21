@@ -9,5 +9,6 @@ int main()
 {
     SystemOfEquations syst("input.txt");
     syst.Solve();
+    syst.printSolves();
     return 0;
 }
