@@ -52,10 +52,19 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Triangle/main.cpp \
-		../Triangle/mainwindow.cpp 
-OBJECTS       = main.o \
-		mainwindow.o
+SOURCES       = ../Triangle/geometrywindow.cpp \
+		../Triangle/main.cpp \
+		../Triangle/mainwindow.cpp \
+		../Triangle/mathwindow.cpp moc_geometrywindow.cpp \
+		moc_mainwindow.cpp \
+		moc_mathwindow.cpp
+OBJECTS       = geometrywindow.o \
+		main.o \
+		mainwindow.o \
+		mathwindow.o \
+		moc_geometrywindow.o \
+		moc_mainwindow.o \
+		moc_mathwindow.o
 DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt6/mkspecs/common/unix.conf \
 		/usr/lib64/qt6/mkspecs/common/linux.conf \
@@ -101,6 +110,7 @@ DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt6/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt6/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt6/mkspecs/features/spec_post.prf \
+		../Triangle/.qmake.stash \
 		/usr/lib64/qt6/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt6/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt6/mkspecs/features/default_pre.prf \
@@ -121,8 +131,12 @@ DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt6/mkspecs/features/exceptions.prf \
 		/usr/lib64/qt6/mkspecs/features/yacc.prf \
 		/usr/lib64/qt6/mkspecs/features/lex.prf \
-		../Triangle/Triangle.pro ../Triangle/mainwindow.h ../Triangle/main.cpp \
-		../Triangle/mainwindow.cpp
+		../Triangle/Triangle.pro ../Triangle/geometrywindow.h \
+		../Triangle/mainwindow.h \
+		../Triangle/mathwindow.h ../Triangle/geometrywindow.cpp \
+		../Triangle/main.cpp \
+		../Triangle/mainwindow.cpp \
+		../Triangle/mathwindow.cpp
 QMAKE_TARGET  = Triangle
 DESTDIR       = 
 TARGET        = Triangle
@@ -179,6 +193,7 @@ Makefile: ../Triangle/Triangle.pro /usr/lib64/qt6/mkspecs/linux-g++/qmake.conf /
 		/usr/lib64/qt6/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt6/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt6/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib64/qt6/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt6/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt6/mkspecs/features/default_pre.prf \
@@ -249,6 +264,7 @@ Makefile: ../Triangle/Triangle.pro /usr/lib64/qt6/mkspecs/linux-g++/qmake.conf /
 /usr/lib64/qt6/mkspecs/features/qt_config.prf:
 /usr/lib64/qt6/mkspecs/linux-g++/qmake.conf:
 /usr/lib64/qt6/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib64/qt6/mkspecs/features/exclusive_builds.prf:
 /usr/lib64/qt6/mkspecs/features/toolchain.prf:
 /usr/lib64/qt6/mkspecs/features/default_pre.prf:
@@ -288,8 +304,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Triangle/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Triangle/main.cpp ../Triangle/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Triangle/geometrywindow.h ../Triangle/mainwindow.h ../Triangle/mathwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Triangle/geometrywindow.cpp ../Triangle/main.cpp ../Triangle/mainwindow.cpp ../Triangle/mathwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Triangle/mainwindow.ui $(DISTDIR)/
 
 
@@ -322,8 +338,24 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib64/qt6/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib64/qt6/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp
+moc_geometrywindow.cpp: ../Triangle/geometrywindow.h \
+		moc_predefs.h \
+		/usr/lib64/qt6/libexec/moc
+	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/geometrywindow.h -o moc_geometrywindow.cpp
+
+moc_mainwindow.cpp: ../Triangle/mainwindow.h \
+		moc_predefs.h \
+		/usr/lib64/qt6/libexec/moc
+	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/mainwindow.h -o moc_mainwindow.cpp
+
+moc_mathwindow.cpp: ../Triangle/mathwindow.h \
+		moc_predefs.h \
+		/usr/lib64/qt6/libexec/moc
+	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/mathwindow.h -o moc_mathwindow.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -341,15 +373,32 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_uic_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
+
+geometrywindow.o: ../Triangle/geometrywindow.cpp ../Triangle/geometrywindow.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o geometrywindow.o ../Triangle/geometrywindow.cpp
 
 main.o: ../Triangle/main.cpp ../Triangle/mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Triangle/main.cpp
 
-mainwindow.o: ../Triangle/mainwindow.cpp ../Triangle/mainwindow.h
+mainwindow.o: ../Triangle/mainwindow.cpp ../Triangle/mainwindow.h \
+		../Triangle/mathwindow.h \
+		../Triangle/geometrywindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Triangle/mainwindow.cpp
+
+mathwindow.o: ../Triangle/mathwindow.cpp ../Triangle/mathwindow.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathwindow.o ../Triangle/mathwindow.cpp
+
+moc_geometrywindow.o: moc_geometrywindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_geometrywindow.o moc_geometrywindow.cpp
+
+moc_mainwindow.o: moc_mainwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_mathwindow.o: moc_mathwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mathwindow.o moc_mathwindow.cpp
 
 ####### Install
 

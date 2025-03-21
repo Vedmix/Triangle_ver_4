@@ -1,15 +1,18 @@
 #include "mainwindow.h"
-#include <QPushButton>
-#include <QLabel>
+#include "mathwindow.h"
+#include "geometrywindow.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QScreen>
+#include <QKeyEvent>
+
 
 WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent) {
     setStyleSheet("background-color: white;");
 
-    QPushButton *button1 = new QPushButton("Математика", this);
-    QPushButton *button2 = new QPushButton("Геометрия", this);
+    button1 = new QPushButton("Математика", this);
+    button2 = new QPushButton("Геометрия", this);
     QLabel *label = new QLabel("Triangle", this);
 
     button1->setFixedSize(800, 200);
@@ -26,13 +29,11 @@ WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent) {
     label->setAlignment(Qt::AlignCenter);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
-
     buttonLayout->addWidget(button1);
     buttonLayout->addWidget(button2);
     buttonLayout->setAlignment(Qt::AlignCenter);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-
     mainLayout->addWidget(label);
     mainLayout->addLayout(buttonLayout);
     mainLayout->setSpacing(200);
@@ -41,6 +42,10 @@ WelcomeWindow::WelcomeWindow(QWidget *parent) : QWidget(parent) {
     setLayout(mainLayout);
 
     setWindowTitle("Triangle");
+
+
+    connect(button1, &QPushButton::clicked, this, &WelcomeWindow::openMathWindow);
+    connect(button2, &QPushButton::clicked, this, &WelcomeWindow::openGeometryWindow);
 
     showFullScreen();
 }
@@ -56,4 +61,16 @@ void WelcomeWindow::keyPressEvent(QKeyEvent *event) {
             setGeometry(screenGeometry);
         }
     }
+}
+
+void WelcomeWindow::openMathWindow() {
+    MathWindow *mathWindow = new MathWindow();
+    mathWindow->show();
+    this->close();
+}
+
+void WelcomeWindow::openGeometryWindow() {
+    GeometryWindow *geometryWindow = new GeometryWindow();
+    geometryWindow->show();
+    this->close();
 }
