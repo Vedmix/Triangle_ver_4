@@ -12,12 +12,14 @@ SOURCES += \
     geometrywindow.cpp \
     main.cpp \
     mainwindow.cpp \
-    mathwindow.cpp
+    mathwindow.cpp \
+    secmathwindow.cpp
 
 HEADERS += \
     geometrywindow.h \
     mainwindow.h \
-    mathwindow.h
+    mathwindow.h \
+    secmathwindow.h
 
 FORMS += \
     mainwindow.ui

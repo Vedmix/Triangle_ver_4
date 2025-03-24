@@ -3,14 +3,20 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <QLabel>
+#include <QVBoxLayout>
 
 class GeometryWindow : public QWidget {
     Q_OBJECT
-protected:
-    void keyPressEvent(QKeyEvent *event);
 public:
     explicit GeometryWindow(QWidget *parent = nullptr);
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+private:
+    QPushButton *button1;
+    QPushButton *button2;
+    QPushButton *button3;
+    QPushButton *button4;
+    QVBoxLayout *buttonLayout;
 };
 
-#endif // GEOMETRYWINDOW_H
+#endif

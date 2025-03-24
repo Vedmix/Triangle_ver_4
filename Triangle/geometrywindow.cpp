@@ -1,6 +1,5 @@
 #include "geometrywindow.h"
 #include <QLabel>
-#include <QLabel>
 #include <QVBoxLayout>
 #include <QScreen>
 #include <QKeyEvent>
@@ -8,6 +7,29 @@
 
 GeometryWindow::GeometryWindow(QWidget *parent) : QWidget(parent) {
     setStyleSheet("background-color: white;");
+
+    button1 = new QPushButton("Треугольник", this);
+    button2 = new QPushButton("Четырехугольник", this);
+    button3 = new QPushButton("Эллипс", this);
+    button4 = new QPushButton("Многоугольнк", this);
+
+    button1->setFixedSize(800, 200);
+    button2->setFixedSize(800, 200);
+    button3->setFixedSize(800, 200);
+    button4->setFixedSize(800, 200);
+    button1->setStyleSheet("font: bold 50px Arial; color: black;");
+    button2->setStyleSheet("font: bold 50px Arial; color: black;");
+    button3->setStyleSheet("font: bold 50px Arial; color: black;");
+    button4->setStyleSheet("font: bold 50px Arial; color: black;");
+
+    buttonLayout = new QVBoxLayout(this);
+    buttonLayout->addWidget(button1);
+    buttonLayout->addWidget(button2);
+    buttonLayout->addWidget(button3);
+    buttonLayout->addWidget(button4);
+    buttonLayout->setAlignment(Qt::AlignCenter);
+
+    setLayout(buttonLayout);
 
     setWindowTitle("Triangle");
 
