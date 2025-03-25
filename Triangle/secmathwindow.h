@@ -16,7 +16,6 @@ private slots:
     void showComplexNumbersContent();
     void keyPressEvent(QKeyEvent *event);
 
-    // Добавьте слоты для обработки нажатий кнопок
     void handleMatrixButton1();
     void handleMatrixButton2();
     void handleMatrixButton3();

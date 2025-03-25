@@ -17,7 +17,7 @@ SecondMathMenu::SecondMathMenu(int contentIndex, QWidget *parent) : QWidget(pare
     stackedWidget->setCurrentIndex(contentIndex);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(stackedWidget);  // Добавляем только stackedWidget
+    mainLayout->addWidget(stackedWidget);
 
     setLayout(mainLayout);
 
@@ -49,7 +49,6 @@ QWidget* SecondMathMenu::createMatrixWidget() {
     matrixButton4->setFixedSize(800, 100);
     matrixButton5->setFixedSize(800, 100);
 
-    // Подключение кнопок к слотам
     connect(matrixButton1, &QPushButton::clicked, this, &SecondMathMenu::handleMatrixButton1);
     connect(matrixButton2, &QPushButton::clicked, this, &SecondMathMenu::handleMatrixButton2);
     connect(matrixButton3, &QPushButton::clicked, this, &SecondMathMenu::handleMatrixButton3);

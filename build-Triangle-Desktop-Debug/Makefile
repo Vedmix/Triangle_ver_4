@@ -52,19 +52,25 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Triangle/geometrywindow.cpp \
+SOURCES       = ../Triangle/geometryresult.cpp \
+		../Triangle/geometrywindow.cpp \
 		../Triangle/main.cpp \
 		../Triangle/mainwindow.cpp \
+		../Triangle/mathresult.cpp \
 		../Triangle/mathwindow.cpp \
-		../Triangle/secmathwindow.cpp moc_geometrywindow.cpp \
+		../Triangle/secmathwindow.cpp moc_geometryresult.cpp \
+		moc_geometrywindow.cpp \
 		moc_mainwindow.cpp \
 		moc_mathwindow.cpp \
 		moc_secmathwindow.cpp
-OBJECTS       = geometrywindow.o \
+OBJECTS       = geometryresult.o \
+		geometrywindow.o \
 		main.o \
 		mainwindow.o \
+		mathresult.o \
 		mathwindow.o \
 		secmathwindow.o \
+		moc_geometryresult.o \
 		moc_geometrywindow.o \
 		moc_mainwindow.o \
 		moc_mathwindow.o \
@@ -135,12 +141,16 @@ DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt6/mkspecs/features/exceptions.prf \
 		/usr/lib64/qt6/mkspecs/features/yacc.prf \
 		/usr/lib64/qt6/mkspecs/features/lex.prf \
-		../Triangle/Triangle.pro ../Triangle/geometrywindow.h \
+		../Triangle/Triangle.pro ../Triangle/geometryresult.h \
+		../Triangle/geometrywindow.h \
 		../Triangle/mainwindow.h \
+		../Triangle/mathresult.h \
 		../Triangle/mathwindow.h \
-		../Triangle/secmathwindow.h ../Triangle/geometrywindow.cpp \
+		../Triangle/secmathwindow.h ../Triangle/geometryresult.cpp \
+		../Triangle/geometrywindow.cpp \
 		../Triangle/main.cpp \
 		../Triangle/mainwindow.cpp \
+		../Triangle/mathresult.cpp \
 		../Triangle/mathwindow.cpp \
 		../Triangle/secmathwindow.cpp
 QMAKE_TARGET  = Triangle
@@ -310,8 +320,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Triangle/geometrywindow.h ../Triangle/mainwindow.h ../Triangle/mathwindow.h ../Triangle/secmathwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Triangle/geometrywindow.cpp ../Triangle/main.cpp ../Triangle/mainwindow.cpp ../Triangle/mathwindow.cpp ../Triangle/secmathwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Triangle/geometryresult.h ../Triangle/geometrywindow.h ../Triangle/mainwindow.h ../Triangle/mathresult.h ../Triangle/mathwindow.h ../Triangle/secmathwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Triangle/geometryresult.cpp ../Triangle/geometrywindow.cpp ../Triangle/main.cpp ../Triangle/mainwindow.cpp ../Triangle/mathresult.cpp ../Triangle/mathwindow.cpp ../Triangle/secmathwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Triangle/mainwindow.ui $(DISTDIR)/
 
 
@@ -344,9 +354,14 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib64/qt6/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib64/qt6/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
+compiler_moc_header_make_all: moc_geometryresult.cpp moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
+	-$(DEL_FILE) moc_geometryresult.cpp moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
+moc_geometryresult.cpp: ../Triangle/geometryresult.h \
+		moc_predefs.h \
+		/usr/lib64/qt6/libexec/moc
+	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/geometryresult.h -o moc_geometryresult.cpp
+
 moc_geometrywindow.cpp: ../Triangle/geometrywindow.h \
 		moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
@@ -388,7 +403,11 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-geometrywindow.o: ../Triangle/geometrywindow.cpp ../Triangle/geometrywindow.h
+geometryresult.o: ../Triangle/geometryresult.cpp ../Triangle/geometryresult.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o geometryresult.o ../Triangle/geometryresult.cpp
+
+geometrywindow.o: ../Triangle/geometrywindow.cpp ../Triangle/geometrywindow.h \
+		../Triangle/geometryresult.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o geometrywindow.o ../Triangle/geometrywindow.cpp
 
 main.o: ../Triangle/main.cpp ../Triangle/mainwindow.h
@@ -399,11 +418,18 @@ mainwindow.o: ../Triangle/mainwindow.cpp ../Triangle/mainwindow.h \
 		../Triangle/geometrywindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Triangle/mainwindow.cpp
 
-mathwindow.o: ../Triangle/mathwindow.cpp ../Triangle/mathwindow.h
+mathresult.o: ../Triangle/mathresult.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathresult.o ../Triangle/mathresult.cpp
+
+mathwindow.o: ../Triangle/mathwindow.cpp ../Triangle/mathwindow.h \
+		../Triangle/secmathwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathwindow.o ../Triangle/mathwindow.cpp
 
-secmathwindow.o: ../Triangle/secmathwindow.cpp 
+secmathwindow.o: ../Triangle/secmathwindow.cpp ../Triangle/secmathwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o secmathwindow.o ../Triangle/secmathwindow.cpp
+
+moc_geometryresult.o: moc_geometryresult.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_geometryresult.o moc_geometryresult.cpp
 
 moc_geometrywindow.o: moc_geometrywindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_geometrywindow.o moc_geometrywindow.cpp

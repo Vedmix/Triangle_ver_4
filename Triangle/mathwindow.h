@@ -14,12 +14,12 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
-    void openSecondMathMenu();  // Объявляем метод для открытия SecondMathMenu
+    void openSecondMathMenu();
 
 private:
-    QPushButton *button1;  // Кнопка "Матрицы"
-    QPushButton *button2;  // Кнопка "Комплексные числа"
-    QVBoxLayout *buttonLayout;  // Layout для кнопок
+    QPushButton *button1;
+    QPushButton *button2;
+    QVBoxLayout *buttonLayout;
 };
 
-#endif // MATHWINDOW_H
+#endif

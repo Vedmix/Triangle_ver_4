@@ -14,12 +14,13 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
-    void openMathWindow();  // Слот для открытия окна математики
-    void openGeometryWindow(); // Слот для открытия окна геометрии
+    void openMathWindow();
+    void openGeometryWindow();
+
 
 private:
     QPushButton *button1;
     QPushButton *button2;
 };
 
-#endif // WELCOMEWINDOW_H
+#endif
