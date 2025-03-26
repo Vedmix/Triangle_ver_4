@@ -82,13 +82,6 @@ Matrix Matrix::operator-(const Matrix& mtx1) const{
         throw invalid_argument("Ошибка: не совпадают размеры матриц!");
     }
     Matrix result(rows, cols);
-    /*if(coeff!=mtx1.coeff){
-        this->devideMatrix(coeff);
-        mtx1.devideMatrix(coeff);
-    }
-    else{
-        result.coeff=this->coeff;
-    }*/
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             result(i, j) = mtx[i][j] - mtx1(i, j);
@@ -103,13 +96,6 @@ Matrix Matrix::operator*(const Matrix& mtx1) const{
         throw invalid_argument("Ошибка: не совпадает длина столбцов и длина строк!");
     }
     Matrix result(rows, mtx1.cols);
-    /*if(coeff!=mtx1.coeff){
-        this->devideMatrix(coeff);
-        mtx1.devideMatrix(coeff);
-    }
-    else{
-        result.coeff=this->coeff;
-    }*/
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < mtx1.cols; j++) {
             for (int k = 0; k < cols; k++) {
@@ -265,6 +251,28 @@ void Matrix::printMartix(){
     }
 }
 
+
+/*void Matrix::printMartixDecimal(){
+    cout << "Коэффициент матрицы: 1/"<<coeff<<endl;
+    for(int i=0; i<rows;i++){
+        for(int j=0;j<cols;j++){
+            if(abs(mtx[i][j]) < 1e-9){
+                mtx[i][j] = 0.0;
+            }
+            mtx[i][j]=round(mtx[i][j] * 100) / 100;
+            cout << mtx[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+}
+
+void Matrix::printMatrixSimple(){
+    //дописать вывод в простых дробях
+    cout << '\n';
+}*/
+
+
+
 Matrix* Matrix::inverseMatrix() {
     if(rows != cols){
         cout << "Ошибка: Матрица должна быть квадратной!" << endl;
@@ -299,6 +307,14 @@ Matrix* Matrix::inverseMatrix() {
         }
     }
     *result=result->transpose();
+    if(det<0){
+        for(int i=0; i<rows;i++){
+            for(int j=0;j<cols;j++){
+                (*result)(i, j) = -(*result)(i, j);
+            }
+        }
+        result->coeff = -result->coeff;
+    }
 
     return result;
 }

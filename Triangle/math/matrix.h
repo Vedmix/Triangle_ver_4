@@ -1,11 +1,5 @@
 #pragma once
 
-struct Fraction
-{
-    int up;
-    int down;
-};
-
 class Matrix
 {
     protected:
@@ -30,6 +24,8 @@ class Matrix
         void devideMatrix(double cff) const;
         void inputMatrix(double** matrix);
         void printMartix();
+        //void printMartixDecimal();
+        //void printMatrixSimple();
         int getRows();
         int getCols();
         Matrix* inverseMatrix();
