@@ -1,6 +1,9 @@
 #include "generalMathFunctions.h"
+#include <cmath>
 
 int foundGCD(int a, int b){
+    a=abs(a);
+    b=abs(b);
     int temp;
     if(a<b){
         temp=a;
@@ -17,5 +20,7 @@ int foundGCD(int a, int b){
 }
 
 int foundLCM(int a, int b){
+    a=abs(a);
+    b=abs(b);
     return (a*b)/foundGCD(a, b);
 }

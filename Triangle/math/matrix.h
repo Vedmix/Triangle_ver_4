@@ -1,34 +1,34 @@
 #pragma once
+#include "fraction.h"
 
 class Matrix
 {
     protected:
-        double** mtx;
+        Fraction** mtx;
         int cols;
         int rows;
-        double coeff; //обратный коэффициент матрицы (1/k) 
+        Fraction coeff;
     public:
         Matrix(int rows, int cols);
         Matrix(const std::string& filename);
         ~Matrix();
-        double determinant();
-        double& operator()(int row, int col);
-        const double& operator()(int row, int col) const;
+        Fraction determinant();
+        Fraction& operator()(int row, int col);
+        const Fraction& operator()(int row, int col) const;
         Matrix operator+(const Matrix& mtx1) const;
         Matrix operator-(const Matrix& mtx1) const;
         Matrix operator*(const Matrix& mtx1) const;
         Matrix& operator=(const Matrix& other);
         Matrix transpose();
-        Matrix operator/(double scalar) const;
-        void setCoeff(double cff);
-        void devideMatrix(double cff) const;
-        void inputMatrix(double** matrix);
-        void printMartix();
-        //void printMartixDecimal();
-        //void printMatrixSimple();
+        Matrix operator/(int scalar) const;
+        void multiplyMatrix(Fraction cff) const;
+        void inputMatrix(Fraction** matrix);
+        void printMartixDecimal();
+        void printMatrixSimple();
         int getRows();
         int getCols();
+        Fraction getCoeff();
+        void setCoeff(Fraction inpCoeff);
         Matrix* inverseMatrix();
-        double getElement(int n, int m);
-        void setElement(int i, int j, int n);
+        Fraction getElement(int n, int m);
 };
