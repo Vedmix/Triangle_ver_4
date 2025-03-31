@@ -99,6 +99,7 @@ QWidget* GeometryResult::createTriangleWidget() {
     // Правая панель (графика)
     triangleGraphic = new TriangleGraphic();
     triangleGraphic->setMinimumSize(600, 600);
+    triangleGraphic->setFocus();
 
     mainLayout->addWidget(leftPanel, 1);
     mainLayout->addWidget(triangleGraphic, 2);
