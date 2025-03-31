@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions>
 #include <QKeyEvent>
 #include <QWheelEvent>
+#include <QPointF>
 
 class TriangleGraphic : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -22,10 +23,11 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 
 private:
-    struct Point { float x, y; } triangle[3];
-    float zoom = 1.0f;
+    struct Point { float x, y; };
+    Point triangle[3];
     QPointF offset;
-    const float pixelToCoord = 0.1f; // Масштабный коэффициент (10 пикселей = 1 единица координат)
+    float zoom;
+    const float pixelToCoord = 0.1f;
 
     void drawGrid();
     void drawAxes();

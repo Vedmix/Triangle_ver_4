@@ -144,6 +144,15 @@ void GeometryResult::updateTriangleInfo() {
          .arg(medians[0], 0, 'f', 2)
          .arg(medians[1], 0, 'f', 2)
          .arg(medians[2], 0, 'f', 2);
+         infoLabel->setStyleSheet(
+               "font-family: Arial;"
+               "color: black;"
+               "font-size: 20px;"
+               "padding: 5px;"
+               "background-color: #f5f5f5;"
+               "border: 1px solid #ddd;"
+               "border-radius: 4px;"
+           );
 
         infoLabel->setText(info);
     } catch (...) {

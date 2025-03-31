@@ -2,44 +2,49 @@
 #include <cmath>
 
 TriangleGraphic::TriangleGraphic(QWidget *parent)
-    : QOpenGLWidget(parent), offset(0, 0)
+    : QOpenGLWidget(parent), offset(0, 0), zoom(1.0f)
 {
     setFocusPolicy(Qt::StrongFocus);
     resetView();
 }
 
-void TriangleGraphic::setTriangleCoordinates(float ax, float ay, float bx, float by, float cx, float cy) {
+void TriangleGraphic::initializeGL()
+{
+    initializeOpenGLFunctions();
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void TriangleGraphic::resizeGL(int w, int h)
+{
+    glViewport(0, 0, w, h);
+}
+
+void TriangleGraphic::paintGL()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    applyTransformations();
+    drawGrid();
+    drawAxes();
+    drawTriangle();
+}
+
+void TriangleGraphic::setTriangleCoordinates(float ax, float ay, float bx, float by, float cx, float cy)
+{
     triangle[0] = {ax, ay};
     triangle[1] = {bx, by};
     triangle[2] = {cx, cy};
     update();
 }
 
-void TriangleGraphic::resetView() {
+void TriangleGraphic::resetView()
+{
     zoom = 1.0f;
     offset = QPointF(0, 0);
     update();
 }
 
-void TriangleGraphic::initializeGL() {
-    initializeOpenGLFunctions();
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-}
-
-void TriangleGraphic::resizeGL(int w, int h) {
-    glViewport(0, 0, w, h);
-}
-
-void TriangleGraphic::paintGL() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    applyTransformations();
-
-    drawGrid();
-    drawAxes();
-    drawTriangle();
-}
-
-void TriangleGraphic::applyTransformations() {
+void TriangleGraphic::applyTransformations()
+{
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
@@ -61,18 +66,17 @@ void TriangleGraphic::applyTransformations() {
     glLoadIdentity();
 }
 
-void TriangleGraphic::drawGrid() {
+void TriangleGraphic::drawGrid()
+{
     glColor3f(0.9f, 0.9f, 0.9f);
     glLineWidth(1.0f);
     glBegin(GL_LINES);
 
-    // Рассчитываем видимую область
     float left = (-width()/2 * pixelToCoord)/zoom + offset.x();
     float right = (width()/2 * pixelToCoord)/zoom + offset.x();
     float bottom = (-height()/2 * pixelToCoord)/zoom + offset.y();
     float top = (height()/2 * pixelToCoord)/zoom + offset.y();
 
-    // Рисуем сетку с шагом 1 единица
     for (float x = floor(left); x <= ceil(right); x += 1.0f) {
         glVertex2f(x, bottom);
         glVertex2f(x, top);
@@ -86,26 +90,22 @@ void TriangleGraphic::drawGrid() {
     glEnd();
 }
 
-void TriangleGraphic::drawAxes() {
+void TriangleGraphic::drawAxes()
+{
     glColor3f(0.5f, 0.5f, 0.5f);
     glLineWidth(2.0f);
     glBegin(GL_LINES);
 
-    // Рассчитываем видимую область
     float left = (-width()/2 * pixelToCoord)/zoom + offset.x();
     float right = (width()/2 * pixelToCoord)/zoom + offset.x();
     float bottom = (-height()/2 * pixelToCoord)/zoom + offset.y();
     float top = (height()/2 * pixelToCoord)/zoom + offset.y();
 
-    // Ось X
     glVertex2f(left, 0);
     glVertex2f(right, 0);
-
-    // Ось Y
     glVertex2f(0, bottom);
     glVertex2f(0, top);
 
-    // Стрелки осей
     float arrowSize = 0.5f;
     glVertex2f(right - arrowSize, arrowSize);
     glVertex2f(right, 0);
@@ -120,8 +120,8 @@ void TriangleGraphic::drawAxes() {
     glEnd();
 }
 
-void TriangleGraphic::drawTriangle() {
-    // Линии треугольника
+void TriangleGraphic::drawTriangle()
+{
     glColor3f(0.0f, 0.7f, 0.0f);
     glLineWidth(2.5f);
     glBegin(GL_LINE_LOOP);
@@ -130,7 +130,6 @@ void TriangleGraphic::drawTriangle() {
     glVertex2f(triangle[2].x, triangle[2].y);
     glEnd();
 
-    // Вершины треугольника
     glColor3f(0.8f, 0.0f, 0.8f);
     glPointSize(7.0f);
     glBegin(GL_POINTS);
@@ -140,7 +139,8 @@ void TriangleGraphic::drawTriangle() {
     glEnd();
 }
 
-void TriangleGraphic::keyPressEvent(QKeyEvent *event) {
+void TriangleGraphic::keyPressEvent(QKeyEvent *event)
+{
     const float moveStep = 1.0f;
 
     switch (event->key()) {
@@ -171,7 +171,8 @@ void TriangleGraphic::keyPressEvent(QKeyEvent *event) {
     update();
 }
 
-void TriangleGraphic::wheelEvent(QWheelEvent *event) {
+void TriangleGraphic::wheelEvent(QWheelEvent *event)
+{
     QPoint numDegrees = event->angleDelta() / 8;
     if (!numDegrees.isNull()) {
         zoom *= (numDegrees.y() > 0) ? 1.1f : 0.9f;
