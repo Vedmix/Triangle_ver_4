@@ -3,14 +3,23 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <QLabel>
+#include <QVBoxLayout>
 
 class MathWindow : public QWidget {
     Q_OBJECT
-protected:
-    void keyPressEvent(QKeyEvent *event);
 public:
     explicit MathWindow(QWidget *parent = nullptr);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
+private slots:
+    void openSecondMathMenu();
+
+private:
+    QPushButton *button1;
+    QPushButton *button2;
+    QVBoxLayout *buttonLayout;
 };
 
-#endif // MATHWINDOW_H
+#endif
