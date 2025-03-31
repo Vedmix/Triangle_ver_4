@@ -1,28 +1,34 @@
 #pragma once
-
-struct Fraction
-{
-    int up;
-    int down;
-};
+#include "fraction.h"
 
 class Matrix
 {
     protected:
-        int** mtx;
+        Fraction** mtx;
         int cols;
         int rows;
+        Fraction coeff;
     public:
         Matrix(int rows, int cols);
         Matrix(const std::string& filename);
         ~Matrix();
-        double determinant();
-        int& operator()(int row, int col);
-        const int& operator()(int row, int col) const;
-        void inputMatrix(int** matrix);
-        void printMartix();
+        Fraction determinant();
+        Fraction& operator()(int row, int col);
+        const Fraction& operator()(int row, int col) const;
+        Matrix operator+(const Matrix& mtx1) const;
+        Matrix operator-(const Matrix& mtx1) const;
+        Matrix operator*(const Matrix& mtx1) const;
+        Matrix& operator=(const Matrix& other);
+        Matrix transpose();
+        Matrix operator/(int scalar) const;
+        void multiplyMatrix(Fraction cff) const;
+        void inputMatrix(Fraction** matrix);
+        void printMartixDecimal();
+        void printMatrixSimple();
         int getRows();
         int getCols();
-        int getElement(int n, int m);
-        void setElement(int i, int j, int n);
+        Fraction getCoeff();
+        void setCoeff(Fraction inpCoeff);
+        Matrix* inverseMatrix();
+        Fraction getElement(int n, int m);
 };
