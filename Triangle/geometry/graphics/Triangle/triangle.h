@@ -12,6 +12,7 @@ private:
     std::vector<double> calculateAngles() const;
     std::vector<double> calculateMedians() const;
     std::vector<std::string> typeOfTriangle() const;
+    std::vector<double> calculateSquare() const;
 
 public:
     Triangle(double x1, double y1, double x2, double y2, double x3, double y3);
@@ -20,5 +21,6 @@ public:
     std::vector<double> getAngles() const;
     std::vector<double> getMedians() const;
     std::vector<std::string> getType() const;
+    std::vector<double> getSquare() const;
 
 };

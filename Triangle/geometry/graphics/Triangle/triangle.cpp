@@ -93,3 +93,17 @@ std::vector<std::string> Triangle::typeOfTriangle() const {
 std::vector<std::string> Triangle::getType() const {
     return typeOfTriangle();
 }
+
+std::vector<double> Triangle::calculateSquare() const {
+    auto sides = calculateSides();
+    double ab = sides[0], bc = sides[1], ac = sides[2];
+
+    double p = ab + bc + ac;
+    double s = sqrt((p / 2) * ((p / 2) - ab) * ((p / 2) - bc) * ((p / 2) - ac));
+
+    return {s, p};
+}
+
+std::vector<double> Triangle::getSquare() const {
+    return calculateSquare();
+}
