@@ -51,22 +51,45 @@ std::vector<double> Triangle::calculateMedians() const {
 std::vector<double> Triangle::getMedians() const {
     return calculateMedians();
 }
+std::vector<std::string> Triangle::typeOfTriangle() const {
+    auto angles = calculateAngles();
+    double a_angle = angles[0], b_angle = angles[1], c_angle = angles[2];
 
-void Triangle::printInfo() const {
-    auto sides = getSides();
-    auto angles = getAngles();
-    auto medians = getMedians();
+    auto sides = calculateSides();
+    double ab = sides[0], bc = sides[1], ac = sides[2];
 
-    std::cout << "Стороны:\n"
-              << "AB: " << sides[0] << "\n"
-              << "BC: " << sides[1] << "\n"
-              << "AC: " << sides[2] << "\n\n"
-              << "Углы:\n"
-              << "∠A: " << angles[0] << "°\n"
-              << "∠B: " << angles[1] << "°\n"
-              << "∠C: " << angles[2] << "°\n\n"
-              << "Медианы:\n"
-              << "ma: " << medians[0] << "\n"
-              << "mb: " << medians[1] << "\n"
-              << "mc: " << medians[2] << std::endl;
+    if (((ab + bc) > ac) && ((ac + bc) > ab) && ((ab + ac) > bc)) {
+        if ((ab == bc) && (bc == ac)) {
+            return {"Равносторонний треугольник"};
+        }
+        else if ((a_angle == 90.0) || (b_angle == 90.0) || (c_angle == 90.0)) {
+            if (((ab != bc) && (bc == ac)) || ((ab == bc) && (bc != ac)) || ((ab == ac) && (ac != bc))) {
+                return {"Прямоугольный треугольник с двумя равными сторонами"};
+            }
+            else {
+                return {"Прямоугольный треугольник"};
+            }
+        }
+        else if ((a_angle < 90.0) && (b_angle < 90.0) && (c_angle < 90.0)) {
+            if (((ab != bc) && (bc == ac)) || ((ab == bc) && (bc != ac)) || ((ab == ac) && (ac != bc))) {
+                return {"Остроугольный треугольник с двумя равными сторонами"};
+            }
+            else {
+                return {"Остроугольный треугольник"};
+            }
+        }
+        else if ((a_angle > 90.0) || (b_angle > 90.0) || (c_angle > 90.0)) {
+            if (((ab != bc) && (bc == ac)) || ((ab == bc) && (bc != ac)) || ((ab == ac) && (ac != bc))) {
+                return {"Тупоугольный треугольник с двумя равными сторонами"};
+            }
+            else {
+                return {"Тупоугольный треугольник"};
+            }
+        }
+    }
+    return {"Невалидный треугольник"};
+}
+
+std::vector<std::string> Triangle::getType() const {
+    return typeOfTriangle();
 }

@@ -40,4 +40,4 @@ private:
     QWidget* createPolygonWidget();
 };
 
-#endif // GEOMETRYRESULT_H
+#endif

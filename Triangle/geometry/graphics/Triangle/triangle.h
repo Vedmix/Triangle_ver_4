@@ -11,6 +11,7 @@ private:
     std::vector<double> calculateSides() const;
     std::vector<double> calculateAngles() const;
     std::vector<double> calculateMedians() const;
+    std::vector<std::string> typeOfTriangle() const;
 
 public:
     Triangle(double x1, double y1, double x2, double y2, double x3, double y3);
@@ -18,6 +19,6 @@ public:
     std::vector<double> getSides() const;
     std::vector<double> getAngles() const;
     std::vector<double> getMedians() const;
+    std::vector<std::string> getType() const;
 
-    void printInfo() const;
 };

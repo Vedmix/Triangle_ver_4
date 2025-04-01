@@ -35,4 +35,4 @@ private:
     void applyTransformations();
 };
 
-#endif // TRIANGLEGRAPHIC_H
+#endif
