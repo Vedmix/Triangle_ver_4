@@ -32,22 +32,18 @@ QWidget* GeometryResult::createTriangleWidget() {
     QWidget* widget = new QWidget();
     QHBoxLayout* mainLayout = new QHBoxLayout(widget);
 
-    // Левая панель (ввод данных)
     QWidget* leftPanel = new QWidget();
     leftPanel->setMaximumWidth(400);
     leftPanel->setStyleSheet("QLabel { color: black; }");
 
     QVBoxLayout* leftLayout = new QVBoxLayout(leftPanel);
 
-    // Форма ввода координат (3 строки вместо 6)
     QFormLayout* formLayout = new QFormLayout();
 
-    // Создаем горизонтальные компоновщики для каждой точки
     QHBoxLayout* pointALayout = new QHBoxLayout();
     QHBoxLayout* pointBLayout = new QHBoxLayout();
     QHBoxLayout* pointCLayout = new QHBoxLayout();
 
-    // Точка A
     axEdit = new QLineEdit("-5");
     ayEdit = new QLineEdit("0");
     pointALayout->addWidget(new QLabel("Ax:"));
@@ -56,7 +52,6 @@ QWidget* GeometryResult::createTriangleWidget() {
     pointALayout->addWidget(ayEdit);
     pointALayout->addStretch();
 
-    // Точка B
     bxEdit = new QLineEdit("0");
     byEdit = new QLineEdit("10");
     pointBLayout->addWidget(new QLabel("Bx:"));
@@ -65,7 +60,6 @@ QWidget* GeometryResult::createTriangleWidget() {
     pointBLayout->addWidget(byEdit);
     pointBLayout->addStretch();
 
-    // Точка C
     cxEdit = new QLineEdit("5");
     cyEdit = new QLineEdit("0");
     pointCLayout->addWidget(new QLabel("Cx:"));
@@ -74,18 +68,15 @@ QWidget* GeometryResult::createTriangleWidget() {
     pointCLayout->addWidget(cyEdit);
     pointCLayout->addStretch();
 
-    // Добавляем в форму
     formLayout->addRow( pointALayout);
     formLayout->addRow(pointBLayout);
     formLayout->addRow(pointCLayout);
 
     leftLayout->addLayout(formLayout);
 
-    // Кнопка обновления
-    QPushButton *updateButton = new QPushButton("Обновить треугольник");
+    QPushButton *updateButton = new QPushButton("Обновить координаты");
     updateButton->setStyleSheet("background-color: white; color: black; padding: 8px;");
 
-    // Информационная панель
     infoLabel = new QLabel();
     infoLabel->setWordWrap(true);
     QFont font;
@@ -96,7 +87,6 @@ QWidget* GeometryResult::createTriangleWidget() {
     leftLayout->addWidget(updateButton);
     leftLayout->addWidget(infoLabel);
 
-    // Правая панель (графика)
     triangleGraphic = new TriangleGraphic();
     triangleGraphic->setMinimumSize(600, 600);
     triangleGraphic->setFocus();
@@ -106,7 +96,6 @@ QWidget* GeometryResult::createTriangleWidget() {
 
     connect(updateButton, &QPushButton::clicked, this, &GeometryResult::updateTriangleInfo);
 
-    // Инициализация с дефолтными значениями
     updateTriangleInfo();
 
     return widget;
@@ -127,15 +116,19 @@ void GeometryResult::updateTriangleInfo() {
         auto sides = triangle.getSides();
         auto angles = triangle.getAngles();
         auto medians = triangle.getMedians();
+        auto type = triangle.getType();
 
         QString info = QString(
+            "<b>Тип:</b><br>"
+            "%1<br>"
             "<b>Стороны:</b><br>"
-            "AB: %1<br>BC: %2<br>AC: %3<br><br>"
+            "AB: %2<br>BC: %3<br>AC: %4<br><br>"
             "<b>Углы:</b><br>"
-            "∠A: %4°<br>∠B: %5°<br>∠C: %6°<br><br>"
+            "∠A: %5°<br>∠B: %6°<br>∠C: %7°<br><br>"
             "<b>Медианы:</b><br>"
-            "ma: %7<br>mb: %8<br>mc: %9"
-        ).arg(sides[0], 0, 'f', 2)
+            "ma: %8<br>mb: %9<br>mc: %10"
+         ).arg(QString::fromStdString(type[0]))
+         .arg(sides[0], 0, 'f', 2)
          .arg(sides[1], 0, 'f', 2)
          .arg(sides[2], 0, 'f', 2)
          .arg(angles[0], 0, 'f', 2)
@@ -175,7 +168,6 @@ void GeometryResult::keyPressEvent(QKeyEvent *event) {
     QWidget::keyPressEvent(event);
 }
 
-// Заглушки для других виджетов
 QWidget* GeometryResult::createTetragonWidget() {
     QWidget *widget = new QWidget();
     widget->setLayout(new QVBoxLayout());
