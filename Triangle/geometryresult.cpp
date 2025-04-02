@@ -117,6 +117,7 @@ void GeometryResult::updateTriangleInfo() {
         auto angles = triangle.getAngles();
         auto medians = triangle.getMedians();
         auto type = triangle.getType();
+<<<<<<< HEAD
 
         QString info = QString(
             "<b>Тип:</b><br>"
@@ -137,6 +138,35 @@ void GeometryResult::updateTriangleInfo() {
          .arg(medians[0], 0, 'f', 2)
          .arg(medians[1], 0, 'f', 2)
          .arg(medians[2], 0, 'f', 2);
+=======
+        auto square = triangle.getSquare();
+
+        QString info = QString(
+            "<b>Тип:</b><br>"
+            "%1<br><br>"
+            "<b>Периметр:</b><br>"
+            "P = %2<br><br>"
+            "<b>Площадь:</b><br>"
+            "S = %3<br><br>"
+            "<b>Стороны:</b><br>"
+            "AB: %4<br>BC: %5<br>AC: %6<br><br>"
+            "<b>Углы:</b><br>"
+            "∠A: %7°<br>∠B: %8°<br>∠C: %9°<br><br>"
+            "<b>Медианы:</b><br>"
+            "AA1: %10<br>BB1: %11<br>CC1: %12"
+         ).arg(QString::fromStdString(type[0]))
+         .arg(square[1], 0, 'f', 3)
+         .arg(square[0], 0, 'f', 3)
+         .arg(sides[0], 0, 'f', 3)
+         .arg(sides[1], 0, 'f', 3)
+         .arg(sides[2], 0, 'f', 3)
+         .arg(angles[0], 0, 'f', 3)
+         .arg(angles[1], 0, 'f', 3)
+         .arg(angles[2], 0, 'f', 3)
+         .arg(medians[0], 0, 'f', 3)
+         .arg(medians[1], 0, 'f', 3)
+         .arg(medians[2], 0, 'f', 3);
+>>>>>>> vedmix
          infoLabel->setStyleSheet(
                "font-family: Arial;"
                "color: black;"
