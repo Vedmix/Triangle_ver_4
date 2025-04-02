@@ -68,6 +68,5 @@ int main()
     cout << '\n';
     mtxRes = mtx*(*inverse);
     mtxRes.printMatrixSimple();*/
->>>>>>> daunito228
     return 0;
 }

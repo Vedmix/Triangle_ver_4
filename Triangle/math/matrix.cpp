@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "matrix.h"
 #include "fraction.h"
 #include <cmath>
+#include <cstring>
 using namespace std;
 
 Fraction& Matrix::operator()(int row, int col)
@@ -135,12 +137,40 @@ Matrix Matrix::operator/(int scalar) const {
 
 Matrix::Matrix(const string& filename){
     ifstream file(filename);
+    char* token = new char[25];
+    char* num = new char[12];
+    bool flag = false;
+    int indexDown=0;
+    int up, down=1;
     if (!file.is_open()) {
         cerr << "Не удалось открыть файл!" << endl;
         return;
     }
     coeff=Fraction(1, 1);
-    file >> rows >> cols;
+    rows = 0;
+    cols = 0;
+    string line;
+    while(getline(file, line)){
+        if(line.empty()) continue;
+        rows++;
+        istringstream iss(line);
+        string token;
+        int current_cols = 0;
+        while(iss >> token){
+            current_cols++;
+        }
+
+        if(rows == 1){
+            cols = current_cols;
+        }
+        else if(current_cols != cols){
+            cerr << "Ошибка: несовместимое количество столбцов в строке " << rows << endl;
+            file.close();
+            return;
+        }
+    }
+    file.clear();
+    file.seekg(0);
     mtx = new Fraction*[rows];
     for (int i = 0; i < rows; i++)
     {
@@ -149,11 +179,29 @@ Matrix::Matrix(const string& filename){
     int inp;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            file >> inp;
-            mtx[i][j].setFraction(inp, 1);
+            file >> token;
+            for(int k=0; k<strlen(token);k++){
+                if(token[k]=='/'){
+                    flag=true;
+                    indexDown=k+1;
+                    break;
+                }
+                num[k]=token[k];
+                num[k+1]='\0';
+            }
+            up = stoi(num);
+            if(flag){
+                for(int k=indexDown; k<strlen(token);k++){
+                    num[k-indexDown] = token[k];
+                    num[k-indexDown+1]='\0';
+                }
+                down = stoi(num);
+                flag=false;
+            }
+            mtx[i][j]=Fraction(up, down);
+            down=1;
         }
     }
-
     file.close();
 }
 
