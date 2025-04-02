@@ -92,8 +92,6 @@ std::vector<std::string> Triangle::typeOfTriangle() const {
 
 std::vector<std::string> Triangle::getType() const {
     return typeOfTriangle();
-<<<<<<< HEAD
-=======
 }
 
 std::vector<double> Triangle::calculateSquare() const {
@@ -108,5 +106,5 @@ std::vector<double> Triangle::calculateSquare() const {
 
 std::vector<double> Triangle::getSquare() const {
     return calculateSquare();
->>>>>>> vedmix
+
 }

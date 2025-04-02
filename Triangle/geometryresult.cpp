@@ -117,28 +117,6 @@ void GeometryResult::updateTriangleInfo() {
         auto angles = triangle.getAngles();
         auto medians = triangle.getMedians();
         auto type = triangle.getType();
-<<<<<<< HEAD
-
-        QString info = QString(
-            "<b>Тип:</b><br>"
-            "%1<br>"
-            "<b>Стороны:</b><br>"
-            "AB: %2<br>BC: %3<br>AC: %4<br><br>"
-            "<b>Углы:</b><br>"
-            "∠A: %5°<br>∠B: %6°<br>∠C: %7°<br><br>"
-            "<b>Медианы:</b><br>"
-            "ma: %8<br>mb: %9<br>mc: %10"
-         ).arg(QString::fromStdString(type[0]))
-         .arg(sides[0], 0, 'f', 2)
-         .arg(sides[1], 0, 'f', 2)
-         .arg(sides[2], 0, 'f', 2)
-         .arg(angles[0], 0, 'f', 2)
-         .arg(angles[1], 0, 'f', 2)
-         .arg(angles[2], 0, 'f', 2)
-         .arg(medians[0], 0, 'f', 2)
-         .arg(medians[1], 0, 'f', 2)
-         .arg(medians[2], 0, 'f', 2);
-=======
         auto square = triangle.getSquare();
 
         QString info = QString(
@@ -166,7 +144,7 @@ void GeometryResult::updateTriangleInfo() {
          .arg(medians[0], 0, 'f', 3)
          .arg(medians[1], 0, 'f', 3)
          .arg(medians[2], 0, 'f', 3);
->>>>>>> vedmix
+
          infoLabel->setStyleSheet(
                "font-family: Arial;"
                "color: black;"
