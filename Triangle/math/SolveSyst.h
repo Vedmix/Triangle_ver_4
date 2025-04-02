@@ -13,6 +13,7 @@ private:
     Fraction* solves;
     bool success; //Имеет ли уравнение конечное количество корней
 public:
+    void SolveGaussMethod();
     void SolveKramerMethod();
     Fraction* getSolves();
     void printSolvesSimple();
