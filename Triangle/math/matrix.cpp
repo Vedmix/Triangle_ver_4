@@ -390,10 +390,23 @@ Matrix* Matrix::inverseMatrix() {
     return result;
 }
 
-
-
 int Matrix::getCols(){return cols;}
 int Matrix::getRows(){return rows;}
 
 Fraction Matrix::getCoeff(){return coeff;}
 void Matrix::setCoeff(Fraction inpCoeff){coeff = inpCoeff;}
+
+void Matrix::subtractionString(int strNum1, int strNum2, Fraction cff){
+    for(int i=0;i<cols;i++){
+        mtx[strNum1][i] = mtx[strNum1][i] - cff*mtx[strNum2][i];
+    }
+}
+void Matrix::triangleMatrix(){
+    Fraction n;
+    for(int i=1; i<rows;i++){
+        for(int j=i;j<rows;j++){
+            n = mtx[j][i-1]/mtx[i-1][i-1];
+            this->subtractionString(j, i-1, n);
+        }
+    }
+}

@@ -31,4 +31,6 @@ class Matrix
         void setCoeff(Fraction inpCoeff);
         Matrix* inverseMatrix();
         Fraction getElement(int n, int m);
+        void triangleMatrix();
+        void subtractionString(int strNum1, int strNum2, Fraction cff); //вычитаем из строки под номером strNum1 строку номер strNum2
 };
