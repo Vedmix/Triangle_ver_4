@@ -5,6 +5,7 @@
 #include "fraction.h"
 #include <cmath>
 #include <cstring>
+#include "generalMathFunctions.h"
 using namespace std;
 
 Fraction& Matrix::operator()(int row, int col)
@@ -396,17 +397,75 @@ int Matrix::getRows(){return rows;}
 Fraction Matrix::getCoeff(){return coeff;}
 void Matrix::setCoeff(Fraction inpCoeff){coeff = inpCoeff;}
 
+bool Matrix::isNullVector(Fraction* vect){
+    for(int i=0;i<cols;i++){
+        if(vect[i].getUp()!=0){
+            return false;
+        }
+    }
+    return true;
+}
+
 void Matrix::subtractionString(int strNum1, int strNum2, Fraction cff){
     for(int i=0;i<cols;i++){
         mtx[strNum1][i] = mtx[strNum1][i] - cff*mtx[strNum2][i];
     }
 }
-void Matrix::triangleMatrix(){
+
+Fraction* Matrix::getString(int n){
+    return mtx[n];
+}
+
+void Matrix::setString(Fraction* vec, int n){
+    for(int i=0;i<cols;i++){
+        mtx[n][i] = vec[i];
+    }
+}
+
+void Matrix::removeNullStrings(){
+    int rowsRes=0;
+    for(int i=0;i<rows;i++){
+        if(!(this->isNullVector(mtx[i]))){
+            if(i!=rowsRes){
+                this->setString(mtx[i], rowsRes);
+            }
+            rowsRes++;
+        }
+    }
+    rows = rowsRes;
+    for(int i=rowsRes;i<rows;i++){
+        delete[] mtx[i];
+        mtx[i]=nullptr;
+    }
+}
+
+
+void Matrix::triangleMatrixs(){
     Fraction n;
     for(int i=1; i<rows;i++){
         for(int j=i;j<rows;j++){
+            if(mtx[i-1][i-1].getUp()==0){
+                continue;
+            }
             n = mtx[j][i-1]/mtx[i-1][i-1];
             this->subtractionString(j, i-1, n);
         }
     }
+}
+
+Matrix* Matrix::triangleMatrix(){
+    Fraction n;
+    Matrix* result = new Matrix(rows, cols);
+    (*result)=*this;
+    for(int i=1; i<rows;i++){
+        for(int j=i;j<rows;j++){
+            if((*result)(i-1, i-1).getUp()==0){
+                continue;
+            }
+            n = (*result)(j, i-1)/(*result)(i-1, i-1);
+            result->subtractionString(j, i-1, n);
+        }
+    }
+    result->removeNullStrings();
+    return result;
 }

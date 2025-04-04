@@ -10,9 +10,12 @@ using namespace std;
 int main()
 {
     Matrix mtx("input.txt");
+    Matrix* res = new Matrix(mtx.getRows(), mtx.getCols());
     mtx.printMatrixSimple();
     cout << '\n';
-    mtx.triangleMatrix();
-    mtx.printMatrixSimple();
+    res = mtx.triangleMatrix();
+    res->printMatrixSimple();
+    cout << res->getRows() << ' ' << res->getCols();
+    cout << '\n';
     return 0;
 }
