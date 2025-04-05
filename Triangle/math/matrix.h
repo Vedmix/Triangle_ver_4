@@ -35,6 +35,7 @@ class Matrix
         Fraction getElement(int n, int m);
         Matrix* triangleMatrix();
         bool isNullVector(Fraction* vect);
+        bool isUnsolveString(int n);
         Fraction* getString(int n);
         void setString(Fraction* vec, int n);
         void removeNullStrings();

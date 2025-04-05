@@ -475,6 +475,15 @@ bool Matrix::isNullVector(Fraction* vect){
     return true;
 }
 
+bool Matrix::isUnsolveString(int n){
+    for(int i=0;i<cols-1;i++){
+        if(mtx[n][i].getUp()!=0){
+            return false;
+        }
+    }
+    return true;
+}
+
 void Matrix::subtractionString(int strNum1, int strNum2, Fraction cff){
     for(int i=0;i<cols;i++){
         mtx[strNum1][i] = mtx[strNum1][i] - cff*mtx[strNum2][i];
@@ -517,13 +526,13 @@ Matrix* Matrix::triangleMatrix(){
     }
     for(int i=1; i<rows;i++){
         for(int j=i;j<rows;j++){
-            if((*result)(i-1, i-1).getUp()==0){
+            if((*result)(i-1, i-1).getUp()==0||(*result)(i-1, i-1).getUp()==0){
                 break;
             }
             n = (*result)(j, i-1)/(*result)(i-1, i-1);
             result->subtractionString(j, i-1, n);
         }
-        if(!((*result)(i, i).getUp()==1 && (*result)(i, i).getDown()==1) && (*result)(i-1, i-1).getUp()!=0){
+        if(!((*result)(i, i).getUp()==1 && (*result)(i, i).getDown()==1) && (*result)(i, i).getUp()!=0){
             result->multiplyString(i, Fraction((*result)(i, i).getDown(), (*result)(i, i).getUp()));
         }
         if((*result)(i, i).getUp()==-1){

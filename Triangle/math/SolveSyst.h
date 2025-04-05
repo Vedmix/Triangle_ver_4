@@ -11,7 +11,9 @@ class SystemOfEquations : public Matrix
 {
 private:
     Fraction* solves;
-    bool success; //Имеет ли уравнение конечное количество корней
+    char** solvesWithParam;
+    bool success;
+    bool hasParam; //Имеет ли уравнение конечное количество корней
 public:
     void SolveGaussMethod();
     void SolveKramerMethod();

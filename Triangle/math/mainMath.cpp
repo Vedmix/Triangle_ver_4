@@ -9,17 +9,10 @@ using namespace std;
 
 int main()
 {
-    Matrix mtx("input4.txt");
+    Matrix mtx("input.txt");
     Matrix* res = new Matrix(mtx.getRows(), mtx.getCols());
-    SystemOfEquations syst("input4.txt");
-    mtx.printMatrixSimple();
-    cout << '\n';
-    res = mtx.triangleMatrix();
-    res->printMatrixSimple();
-    cout << '\n';
-    int rk=mtx.getRank();
-    cout << rk <<endl;
-    syst.SolveGaussMethod();
+    SystemOfEquations syst("input.txt");
+    syst.Solve();
     if(syst.isSuccess()){
         syst.printSolvesSimple();
     }
