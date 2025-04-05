@@ -40,5 +40,5 @@ class Matrix
         void removeNullStrings();
         int getRank();
         void swapRows(int row1, int row2);
-        void subtractionString(int strNum1, int strNum2, Fraction cff); //вычитаем из строки под номером strNum1 строку номер strNum2
+        void subtractionString(int strNum1, int strNum2, Fraction cff); //вычитаем из строки под номером strNum1 строку номер strNum2, домноженную на cff
 };

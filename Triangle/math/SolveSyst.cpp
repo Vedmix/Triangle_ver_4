@@ -36,6 +36,14 @@ void SystemOfEquations::printSolvesSimple(){
     cout << '\n';
 }
 
+void SystemOfEquations::inputSystem(Fraction** input){
+    for(int i=0; i<rows;i++){
+        for(int j=0; j<cols;j++){
+            mtx[i][j] = input[i][j];
+        }
+    }
+}
+
 void SystemOfEquations::printSolvesDecimal(){
     int rows = getRows();
     double res;
@@ -74,19 +82,37 @@ void SystemOfEquations::SolveKramerMethod(){
     }
 }
 
+void SystemOfEquations::SolveGaussMethod(){
+    Fraction n;
+    Matrix* syst = new Matrix(rows, cols);
+    syst->inputMatrix(mtx);
+    syst = syst->triangleMatrix();
+    for(int i=syst->getRows()-1;i>0;i--){
+        for(int j=i-1;j>-1;j--){
+            n=(*syst)(j, i)/(*syst)(i, i);
+            syst->subtractionString(j, i, n);
+        }
+    }
+    if(syst->getCols()-1==syst->getRows()){
+        for(int i=0;i<syst->getRows();i++){
+            solves[i]=(*syst)(i, syst->getCols()-1);
+        }
+        success=true;
+    }
+    else{
+        syst->printMatrixSimple();cout<<'\n';
+        success=false;
+    }
+    
+}
+
 bool SystemOfEquations::isSuccess(){return success;}
 
 void SystemOfEquations::Solve(){
     cout << "Введённая система: " << endl;
     printMatrixSimple();
     //Решаем методом Крамера
-    if(getCols()-1==getRows()){
-        SolveKramerMethod();
-    }
-    else{
-        //тут будет гаусс мб
-        cout << '\n';
-    }
+   
     if(isSuccess()){
         cout<<"Уравнение имеет бесконечное количество решений, либо не имеет их"<< endl;
     }

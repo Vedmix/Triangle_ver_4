@@ -526,6 +526,9 @@ Matrix* Matrix::triangleMatrix(){
         if(!((*result)(i, i).getUp()==1 && (*result)(i, i).getDown()==1) && (*result)(i-1, i-1).getUp()!=0){
             result->multiplyString(i, Fraction((*result)(i, i).getDown(), (*result)(i, i).getUp()));
         }
+        if((*result)(i, i).getUp()==-1){
+            result->multiplyString(i, Fraction(-1, 1));
+        }
     }
     result->removeNullStrings();
     return result;

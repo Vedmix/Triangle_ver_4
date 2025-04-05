@@ -9,8 +9,9 @@ using namespace std;
 
 int main()
 {
-    Matrix mtx("inputDet.txt");
+    Matrix mtx("input4.txt");
     Matrix* res = new Matrix(mtx.getRows(), mtx.getCols());
+    SystemOfEquations syst("input4.txt");
     mtx.printMatrixSimple();
     cout << '\n';
     res = mtx.triangleMatrix();
@@ -18,7 +19,9 @@ int main()
     cout << '\n';
     int rk=mtx.getRank();
     cout << rk <<endl;
-    Fraction det = mtx.determinantRecursion();
-    det.printFraction();cout<<'\n';
+    syst.SolveGaussMethod();
+    if(syst.isSuccess()){
+        syst.printSolvesSimple();
+    }
     return 0;
 }
