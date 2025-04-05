@@ -9,13 +9,16 @@ using namespace std;
 
 int main()
 {
-    Matrix mtx("input.txt");
+    Matrix mtx("inputDet.txt");
     Matrix* res = new Matrix(mtx.getRows(), mtx.getCols());
     mtx.printMatrixSimple();
     cout << '\n';
     res = mtx.triangleMatrix();
     res->printMatrixSimple();
-    cout << res->getRows() << ' ' << res->getCols();
     cout << '\n';
+    int rk=mtx.getRank();
+    cout << rk <<endl;
+    Fraction det = mtx.determinantRecursion();
+    det.printFraction();cout<<'\n';
     return 0;
 }

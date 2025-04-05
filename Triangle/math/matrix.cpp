@@ -233,8 +233,14 @@ Matrix::~Matrix() {
     }
 }
 
+void Matrix::swapRows(int row1, int row2){
+    Fraction* temp;
+    temp = mtx[row1];
+    mtx[row1] = mtx[row2];
+    mtx[row2]=temp;
+}
 
-Fraction Matrix::determinant(){
+Fraction Matrix::determinantRecursion(){
     if(rows!=cols){
         cout<<"Невозможно найти определитель неквадратной матрицы!"<<endl;
         return Fraction(0, 0);
@@ -263,7 +269,7 @@ Fraction Matrix::determinant(){
             }
         }
 
-        Fraction subDet = submatrix.determinant();
+        Fraction subDet = submatrix.determinantRecursion();
         if(col%2==0){
             dtrm = dtrm + mtx[0][col]*subDet;
         }
@@ -275,6 +281,63 @@ Fraction Matrix::determinant(){
 
     return dtrm;
 }
+
+Fraction Matrix::determinant(){
+    if(rows!=cols){
+        cout<<"Невозможно найти определитель неквадратной матрицы!"<<endl;
+        return Fraction(0, 0);
+    }
+    if(coeff.getUp()!=1 || coeff.getDown()!=1){
+        this->multiplyMatrix(coeff);
+    }
+    if(rows==1){
+        return mtx[0][0];
+    }
+    if(rows==2){
+        return mtx[0][0] * mtx[1][1] - mtx[0][1] * mtx[1][0];
+    }
+    Matrix* result = new Matrix(rows, cols);
+    (*result)=*this;
+    Fraction det(1, 1);
+    int sign = 1;
+    int pivot;
+    for(int i=0; i<cols; i++){
+        pivot = i;
+        while(pivot<cols && (*result)(pivot, i).getUp()==0){
+            pivot++;
+        }
+        if(pivot == cols){
+            return Fraction(0, 1);
+        }
+
+        if(pivot != i){
+            swapRows(i, pivot);
+            sign*=-1;
+        }
+        Fraction* pivotRow = result->getString(i);
+        Fraction pivotElement = pivotRow[i];
+        det = det * pivotElement;
+
+        for (int j = i + 1; j < cols; j++) {
+            Fraction* currentRow = result->getString(j);
+            Fraction factor = currentRow[i] / pivotElement;
+
+            for(int k=i; k<cols; k++) {
+                currentRow[k] = currentRow[k]-(pivotRow[k]*factor);
+            }
+        }
+    }
+    det = det*Fraction(sign, 1);
+    return det;
+}
+
+int Matrix::getRank(){
+    Matrix* mtx2 = new Matrix(rows, cols);
+    (*mtx2)=(*this);
+    mtx2 = this->triangleMatrix();
+    return mtx2->getRows();
+}
+
 
 Matrix Matrix::transpose(){
     Matrix result(cols, rows);
@@ -397,6 +460,12 @@ int Matrix::getRows(){return rows;}
 Fraction Matrix::getCoeff(){return coeff;}
 void Matrix::setCoeff(Fraction inpCoeff){coeff = inpCoeff;}
 
+void Matrix::multiplyString(int n, Fraction cff){
+    for(int i=0;i<cols;i++){
+        mtx[n][i]=mtx[n][i]*cff;
+    }
+}
+
 bool Matrix::isNullVector(Fraction* vect){
     for(int i=0;i<cols;i++){
         if(vect[i].getUp()!=0){
@@ -439,31 +508,23 @@ void Matrix::removeNullStrings(){
     }
 }
 
-
-void Matrix::triangleMatrixs(){
-    Fraction n;
-    for(int i=1; i<rows;i++){
-        for(int j=i;j<rows;j++){
-            if(mtx[i-1][i-1].getUp()==0){
-                continue;
-            }
-            n = mtx[j][i-1]/mtx[i-1][i-1];
-            this->subtractionString(j, i-1, n);
-        }
-    }
-}
-
 Matrix* Matrix::triangleMatrix(){
     Fraction n;
     Matrix* result = new Matrix(rows, cols);
     (*result)=*this;
+    if(!((*result)(0, 0).getUp()==1 && (*result)(0, 0).getDown()==1)){
+        result->multiplyString(0, Fraction((*result)(0, 0).getDown(), (*result)(0, 0).getUp()));
+    }
     for(int i=1; i<rows;i++){
         for(int j=i;j<rows;j++){
             if((*result)(i-1, i-1).getUp()==0){
-                continue;
+                break;
             }
             n = (*result)(j, i-1)/(*result)(i-1, i-1);
             result->subtractionString(j, i-1, n);
+        }
+        if(!((*result)(i, i).getUp()==1 && (*result)(i, i).getDown()==1) && (*result)(i-1, i-1).getUp()!=0){
+            result->multiplyString(i, Fraction((*result)(i, i).getDown(), (*result)(i, i).getUp()));
         }
     }
     result->removeNullStrings();
