@@ -102,8 +102,8 @@ Matrix Matrix::operator-(const Matrix& other) const{
 }
 
 Matrix Matrix::operator*(const Matrix& mtx1) const{
-    if (mtx1.cols != rows) {
-        throw invalid_argument("Ошибка: не совпадает длина столбцов и длина строк!");
+    if (cols != mtx1.rows) {
+        throw invalid_argument("Ошибка: количество столбцов первой матрицы не совпадает с количеством строк второй матрицы!");
     }
     Matrix result(rows, mtx1.cols);
     Matrix mx1(rows, cols); mx1 = *this;
