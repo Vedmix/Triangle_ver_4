@@ -19,8 +19,6 @@ Fraction::~Fraction()
 {
 }
 
-
-
 Fraction Fraction::operator+(const Fraction& frc) const{
     Fraction res(0, 0);
     int lcm;//НОК

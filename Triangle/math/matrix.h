@@ -12,6 +12,7 @@ class Matrix
         Matrix(int rows, int cols);
         Matrix(const std::string& filename);
         ~Matrix();
+        Fraction determinantRecursion();
         Fraction determinant();
         Fraction& operator()(int row, int col);
         const Fraction& operator()(int row, int col) const;
@@ -30,5 +31,15 @@ class Matrix
         Fraction getCoeff();
         void setCoeff(Fraction inpCoeff);
         Matrix* inverseMatrix();
+        void multiplyString(int n, Fraction cff);
         Fraction getElement(int n, int m);
+        Matrix* triangleMatrix();
+        bool isNullVector(Fraction* vect);
+        bool isUnsolveString(int n);
+        Fraction* getString(int n);
+        void setString(Fraction* vec, int n);
+        void removeNullStrings();
+        int getRank();
+        void swapRows(int row1, int row2);
+        void subtractionString(int strNum1, int strNum2, Fraction cff); //вычитаем из строки под номером strNum1 строку номер strNum2, домноженную на cff
 };
