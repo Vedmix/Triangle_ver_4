@@ -64,6 +64,7 @@ SOURCES       = ../Triangle/geometry/graphics/Triangle/triangle.cpp \
 		moc_geometryresult.cpp \
 		moc_geometrywindow.cpp \
 		moc_mainwindow.cpp \
+		moc_mathresult.cpp \
 		moc_mathwindow.cpp \
 		moc_secmathwindow.cpp
 OBJECTS       = triangle.o \
@@ -79,6 +80,7 @@ OBJECTS       = triangle.o \
 		moc_geometryresult.o \
 		moc_geometrywindow.o \
 		moc_mainwindow.o \
+		moc_mathresult.o \
 		moc_mathwindow.o \
 		moc_secmathwindow.o
 DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
@@ -368,9 +370,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib64/qt6/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib64/qt6/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_trianglegraphic.cpp moc_geometryresult.cpp moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
+compiler_moc_header_make_all: moc_trianglegraphic.cpp moc_geometryresult.cpp moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathresult.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_trianglegraphic.cpp moc_geometryresult.cpp moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
+	-$(DEL_FILE) moc_trianglegraphic.cpp moc_geometryresult.cpp moc_geometrywindow.cpp moc_mainwindow.cpp moc_mathresult.cpp moc_mathwindow.cpp moc_secmathwindow.cpp
 moc_trianglegraphic.cpp: ../Triangle/geometry/graphics/Triangle/trianglegraphic.h \
 		moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
@@ -392,6 +394,11 @@ moc_mainwindow.cpp: ../Triangle/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
 	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtOpenGLWidgets -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/mainwindow.h -o moc_mainwindow.cpp
+
+moc_mathresult.cpp: ../Triangle/mathresult.h \
+		moc_predefs.h \
+		/usr/lib64/qt6/libexec/moc
+	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtOpenGLWidgets -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/mathresult.h -o moc_mathresult.cpp
 
 moc_mathwindow.cpp: ../Triangle/mathwindow.h \
 		moc_predefs.h \
@@ -449,14 +456,15 @@ mainwindow.o: ../Triangle/mainwindow.cpp ../Triangle/mainwindow.h \
 		../Triangle/geometrywindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Triangle/mainwindow.cpp
 
-mathresult.o: ../Triangle/mathresult.cpp 
+mathresult.o: ../Triangle/mathresult.cpp ../Triangle/mathresult.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathresult.o ../Triangle/mathresult.cpp
 
 mathwindow.o: ../Triangle/mathwindow.cpp ../Triangle/mathwindow.h \
 		../Triangle/secmathwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathwindow.o ../Triangle/mathwindow.cpp
 
-secmathwindow.o: ../Triangle/secmathwindow.cpp ../Triangle/secmathwindow.h
+secmathwindow.o: ../Triangle/secmathwindow.cpp ../Triangle/secmathwindow.h \
+		../Triangle/mathresult.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o secmathwindow.o ../Triangle/secmathwindow.cpp
 
 moc_trianglegraphic.o: moc_trianglegraphic.cpp 
@@ -470,6 +478,9 @@ moc_geometrywindow.o: moc_geometrywindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_mathresult.o: moc_mathresult.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mathresult.o moc_mathresult.cpp
 
 moc_mathwindow.o: moc_mathwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mathwindow.o moc_mathwindow.cpp
