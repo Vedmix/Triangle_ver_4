@@ -9,6 +9,9 @@ CONFIG += c++17
 SOURCES += \
     geometry/graphics/Triangle/triangle.cpp \
     geometry/graphics/Triangle/trianglegraphic.cpp \
+    math/matrix.cpp \
+    math/fraction.cpp \
+    math/generalMathFunctions.cpp \
     geometryresult.cpp \
     geometrywindow.cpp \
     main.cpp \
@@ -20,6 +23,9 @@ SOURCES += \
 HEADERS += \
     geometry/graphics/Triangle/triangle.h \
     geometry/graphics/Triangle/trianglegraphic.h \
+    math/matrix.h \
+    math/fraction.h \
+    math/generalMathFunctions.h \
     geometryresult.h \
     geometrywindow.h \
     mainwindow.h \

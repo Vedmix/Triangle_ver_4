@@ -8,6 +8,11 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QFormLayout>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QScreen>
+#include <QSpinBox>
+#include "math/matrix.h"
 
 class MathResult : public QWidget
 {
@@ -20,6 +25,10 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+private slots:
+    void updateMatrixSize();
+    void processMatrix();
+
 private:
     QStackedWidget *stackedWidget;
 
@@ -27,6 +36,15 @@ private:
     QWidget* createTranspose();
     QWidget* createInverseMatrix();
     QWidget* createMatrixOperations();
+    QString matrixToString(Matrix& matrix) const;
+
+    QGridLayout* matrixLayout;
+    QLabel* resultLabel;
+    QPushButton* processButton;
+    QSpinBox* rowSpin;
+    QSpinBox* colSpin;
+
+    void clearLayout();
 };
 
 #endif

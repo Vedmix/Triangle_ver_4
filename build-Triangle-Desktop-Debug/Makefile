@@ -54,6 +54,9 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Triangle/geometry/graphics/Triangle/triangle.cpp \
 		../Triangle/geometry/graphics/Triangle/trianglegraphic.cpp \
+		../Triangle/math/matrix.cpp \
+		../Triangle/math/fraction.cpp \
+		../Triangle/math/generalMathFunctions.cpp \
 		../Triangle/geometryresult.cpp \
 		../Triangle/geometrywindow.cpp \
 		../Triangle/main.cpp \
@@ -69,6 +72,9 @@ SOURCES       = ../Triangle/geometry/graphics/Triangle/triangle.cpp \
 		moc_secmathwindow.cpp
 OBJECTS       = triangle.o \
 		trianglegraphic.o \
+		matrix.o \
+		fraction.o \
+		generalMathFunctions.o \
 		geometryresult.o \
 		geometrywindow.o \
 		main.o \
@@ -151,6 +157,9 @@ DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt6/mkspecs/features/lex.prf \
 		../Triangle/Triangle.pro ../Triangle/geometry/graphics/Triangle/triangle.h \
 		../Triangle/geometry/graphics/Triangle/trianglegraphic.h \
+		../Triangle/math/matrix.h \
+		../Triangle/math/fraction.h \
+		../Triangle/math/generalMathFunctions.h \
 		../Triangle/geometryresult.h \
 		../Triangle/geometrywindow.h \
 		../Triangle/mainwindow.h \
@@ -158,6 +167,9 @@ DIST          = /usr/lib64/qt6/mkspecs/features/spec_pre.prf \
 		../Triangle/mathwindow.h \
 		../Triangle/secmathwindow.h ../Triangle/geometry/graphics/Triangle/triangle.cpp \
 		../Triangle/geometry/graphics/Triangle/trianglegraphic.cpp \
+		../Triangle/math/matrix.cpp \
+		../Triangle/math/fraction.cpp \
+		../Triangle/math/generalMathFunctions.cpp \
 		../Triangle/geometryresult.cpp \
 		../Triangle/geometrywindow.cpp \
 		../Triangle/main.cpp \
@@ -336,8 +348,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Triangle/geometry/graphics/Triangle/triangle.h ../Triangle/geometry/graphics/Triangle/trianglegraphic.h ../Triangle/geometryresult.h ../Triangle/geometrywindow.h ../Triangle/mainwindow.h ../Triangle/mathresult.h ../Triangle/mathwindow.h ../Triangle/secmathwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Triangle/geometry/graphics/Triangle/triangle.cpp ../Triangle/geometry/graphics/Triangle/trianglegraphic.cpp ../Triangle/geometryresult.cpp ../Triangle/geometrywindow.cpp ../Triangle/main.cpp ../Triangle/mainwindow.cpp ../Triangle/mathresult.cpp ../Triangle/mathwindow.cpp ../Triangle/secmathwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Triangle/geometry/graphics/Triangle/triangle.h ../Triangle/geometry/graphics/Triangle/trianglegraphic.h ../Triangle/math/matrix.h ../Triangle/math/fraction.h ../Triangle/math/generalMathFunctions.h ../Triangle/geometryresult.h ../Triangle/geometrywindow.h ../Triangle/mainwindow.h ../Triangle/mathresult.h ../Triangle/mathwindow.h ../Triangle/secmathwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Triangle/geometry/graphics/Triangle/triangle.cpp ../Triangle/geometry/graphics/Triangle/trianglegraphic.cpp ../Triangle/math/matrix.cpp ../Triangle/math/fraction.cpp ../Triangle/math/generalMathFunctions.cpp ../Triangle/geometryresult.cpp ../Triangle/geometrywindow.cpp ../Triangle/main.cpp ../Triangle/mainwindow.cpp ../Triangle/mathresult.cpp ../Triangle/mathwindow.cpp ../Triangle/secmathwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Triangle/mainwindow.ui $(DISTDIR)/
 
 
@@ -396,6 +408,8 @@ moc_mainwindow.cpp: ../Triangle/mainwindow.h \
 	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtOpenGLWidgets -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/mainwindow.h -o moc_mainwindow.cpp
 
 moc_mathresult.cpp: ../Triangle/mathresult.h \
+		../Triangle/math/matrix.h \
+		../Triangle/math/fraction.h \
 		moc_predefs.h \
 		/usr/lib64/qt6/libexec/moc
 	/usr/lib64/qt6/libexec/moc $(DEFINES) --include /home/vedmix/Triangle_ver_4/build-Triangle-Desktop-Debug/moc_predefs.h -I/usr/lib64/qt6/mkspecs/linux-g++ -I/home/vedmix/Triangle_ver_4/Triangle -I/usr/include/qt6 -I/usr/include/qt6/QtOpenGLWidgets -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtOpenGL -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I. -I/usr/include/c++/10 -I/usr/include/c++/10/x86_64-alt-linux -I/usr/include/c++/10/backward -I/usr/lib64/gcc/x86_64-alt-linux/10/include -I/usr/local/include -I/usr/include ../Triangle/mathresult.h -o moc_mathresult.cpp
@@ -437,6 +451,19 @@ triangle.o: ../Triangle/geometry/graphics/Triangle/triangle.cpp ../Triangle/geom
 trianglegraphic.o: ../Triangle/geometry/graphics/Triangle/trianglegraphic.cpp ../Triangle/geometry/graphics/Triangle/trianglegraphic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o trianglegraphic.o ../Triangle/geometry/graphics/Triangle/trianglegraphic.cpp
 
+matrix.o: ../Triangle/math/matrix.cpp ../Triangle/math/matrix.h \
+		../Triangle/math/fraction.h \
+		../Triangle/math/generalMathFunctions.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o matrix.o ../Triangle/math/matrix.cpp
+
+fraction.o: ../Triangle/math/fraction.cpp ../Triangle/math/fraction.h \
+		../Triangle/math/generalMathFunctions.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fraction.o ../Triangle/math/fraction.cpp
+
+generalMathFunctions.o: ../Triangle/math/generalMathFunctions.cpp ../Triangle/math/generalMathFunctions.h \
+		../Triangle/math/fraction.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generalMathFunctions.o ../Triangle/math/generalMathFunctions.cpp
+
 geometryresult.o: ../Triangle/geometryresult.cpp ../Triangle/geometryresult.h \
 		../Triangle/geometry/graphics/Triangle/trianglegraphic.h \
 		../Triangle/geometry/graphics/Triangle/triangle.h
@@ -456,7 +483,9 @@ mainwindow.o: ../Triangle/mainwindow.cpp ../Triangle/mainwindow.h \
 		../Triangle/geometrywindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Triangle/mainwindow.cpp
 
-mathresult.o: ../Triangle/mathresult.cpp ../Triangle/mathresult.h
+mathresult.o: ../Triangle/mathresult.cpp ../Triangle/mathresult.h \
+		../Triangle/math/matrix.h \
+		../Triangle/math/fraction.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathresult.o ../Triangle/mathresult.cpp
 
 mathwindow.o: ../Triangle/mathwindow.cpp ../Triangle/mathwindow.h \
@@ -464,7 +493,9 @@ mathwindow.o: ../Triangle/mathwindow.cpp ../Triangle/mathwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mathwindow.o ../Triangle/mathwindow.cpp
 
 secmathwindow.o: ../Triangle/secmathwindow.cpp ../Triangle/secmathwindow.h \
-		../Triangle/mathresult.h
+		../Triangle/mathresult.h \
+		../Triangle/math/matrix.h \
+		../Triangle/math/fraction.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o secmathwindow.o ../Triangle/secmathwindow.cpp
 
 moc_trianglegraphic.o: moc_trianglegraphic.cpp 

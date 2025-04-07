@@ -115,4 +115,3 @@ void SecondMathMenu::showMatrixContent() {
 void SecondMathMenu::showComplexNumbersContent() {
     stackedWidget->setCurrentIndex(1);
 }
-
