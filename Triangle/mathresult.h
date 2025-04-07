@@ -37,6 +37,7 @@ private:
     QWidget* createInverseMatrix();
     QWidget* createMatrixOperations();
     QString matrixToString(Matrix& matrix) const;
+    void ImplataMatrixSize();
 
     QGridLayout* matrixLayout;
     QLabel* resultLabel;

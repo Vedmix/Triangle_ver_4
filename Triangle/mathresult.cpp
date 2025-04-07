@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QKeyEvent>
-#include <QScreen>
+#include <QSpacerItem>
 
 MathResult::MathResult(int contentIndex, QWidget *parent)
     : QWidget(parent),
@@ -15,38 +15,69 @@ MathResult::MathResult(int contentIndex, QWidget *parent)
       rowSpin(new QSpinBox(this)),
       colSpin(new QSpinBox(this))
 {
-    setStyleSheet("background-color: white;");
-    setStyleSheet("QLabel { color: black; font-weight: bold; }");
+    setStyleSheet(R"(
+        QWidget {
+            background-color: white;
+        }
+        QLabel, QSpinBox, QLineEdit, QPushButton {
+            color: black;
+            font-weight: bold;
+        }
+        QLineEdit {
+            background-color: white;
+            border: 1px solid gray;
+        }
+    )");
 
+    // Главный вертикальный layout
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->setAlignment(Qt::AlignCenter);
 
+    // Первый спейсер для выравнивания по вертикали
+    mainLayout->addStretch(1);
 
-    // Инициализация matrixLayout как дочернего элемента this
-    matrixLayout = new QGridLayout();
+    // Горизонтальный layout для центрирования содержимого
+    QHBoxLayout* hLayout = new QHBoxLayout();
+    hLayout->addStretch(1);
 
-    // Настройка элементов
+    // Вертикальный layout для матрицы и элементов управления
+    QVBoxLayout* vLayout = new QVBoxLayout();
+
+    // Настройка элементов управления
     rowSpin->setRange(1, 10);
     colSpin->setRange(1, 10);
     rowSpin->setValue(3);
     colSpin->setValue(3);
 
     resultLabel->setAlignment(Qt::AlignCenter);
-    resultLabel->setStyleSheet("QLabel { color: black; font-weight: bold; }");
+    resultLabel->setMinimumWidth(400); // Фиксированная ширина для выравнивания
 
-    // Главная компоновка
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);  // Устанавливаем layout для this
-
-    // Горизонтальная компоновка для элементов управления
-    QHBoxLayout* controlLayout = new QHBoxLayout();  // Не устанавливаем родителя!
+    // Layout для контролов размера матрицы
+    QHBoxLayout* controlLayout = new QHBoxLayout();
     controlLayout->addWidget(new QLabel("Строки:"));
     controlLayout->addWidget(rowSpin);
     controlLayout->addWidget(new QLabel("Столбцы:"));
     controlLayout->addWidget(colSpin);
 
-    // Добавляем все элементы в главный layout
-    mainLayout->addWidget(resultLabel);
-    mainLayout->addLayout(matrixLayout);  // Добавляем grid layout
-    mainLayout->addLayout(controlLayout); // Добавляем control layout
-    mainLayout->addWidget(processButton);
+    // Layout для матрицы
+    matrixLayout = new QGridLayout();
+    matrixLayout->setAlignment(Qt::AlignCenter);
+
+    // Добавляем элементы в вертикальный layout
+    vLayout->addWidget(resultLabel, 0, Qt::AlignCenter);
+    vLayout->addLayout(controlLayout);
+    vLayout->addLayout(matrixLayout);
+    vLayout->addWidget(processButton, 0, Qt::AlignCenter);
+
+    // Добавляем вертикальный layout в горизонтальный
+    hLayout->addLayout(vLayout);
+    hLayout->addStretch(1);
+
+    // Добавляем горизонтальный layout в главный
+    mainLayout->addLayout(hLayout);
+
+    // Второй спейсер для выравнивания по вертикали
+    mainLayout->addStretch(1);
 
     // Подключение сигналов
     connect(rowSpin, QOverload<int>::of(&QSpinBox::valueChanged),
@@ -59,6 +90,7 @@ MathResult::MathResult(int contentIndex, QWidget *parent)
     updateMatrixSize();
     showFullScreen();
 }
+
 
 QWidget* MathResult::createDeterminatorRank() {
     QWidget *widget = new QWidget();
@@ -93,33 +125,26 @@ QString MathResult::matrixToString(Matrix& matrix) const {
     int rows = matrix.getRows();
     int cols = matrix.getCols();
 
-    // Добавляем заголовок
     result += "Матрица " + QString::number(rows) + "x" + QString::number(cols) + ":\n";
     result += "----------------\n";
 
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
             Fraction frac = matrix(r, c);
-
-            // Форматируем дробь
             if (frac.getDown() == 1) {
                 result += QString::number(frac.getUp());
             } else {
-                // Для отрицательных дробей правильно размещаем знак
                 if (frac.getUp() < 0 || frac.getDown() < 0) {
                     result += "-" + QString::number(abs(frac.getUp())) + "/" + QString::number(abs(frac.getDown()));
                 } else {
                     result += QString::number(frac.getUp()) + "/" + QString::number(frac.getDown());
                 }
             }
-
-            // Добавляем отступ между элементами
             result += "\t";
         }
-        result += "\n"; // Новая строка матрицы
+        result += "\n";
     }
 
-    // Добавляем информацию о детерминанте для квадратных матриц
     if (rows == cols) {
         try {
             Fraction det = matrix.determinant();
@@ -137,6 +162,22 @@ QString MathResult::matrixToString(Matrix& matrix) const {
     return result;
 }
 
+void MathResult::ImplataMatrixSize() {
+    clearLayout();
+    int rows = rowSpin->value();
+    int cols = colSpin->value();
+
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+            QLineEdit* edit = new QLineEdit(this);
+            edit->setAlignment(Qt::AlignCenter);
+            edit->setText("0");
+            edit->setMaximumWidth(60);
+            matrixLayout->addWidget(edit, r, c);
+        }
+    }
+}
+
 void MathResult::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
         if (isFullScreen()) {
@@ -152,27 +193,7 @@ void MathResult::keyPressEvent(QKeyEvent *event) {
 }
 
 void MathResult::updateMatrixSize() {
-    // Очищаем текущие элементы
-    QLayoutItem* child;
-    while ((child = matrixLayout->takeAt(0)) != nullptr) {
-        if (child->widget()) {
-            delete child->widget();
-        }
-        delete child;
-    }
-
-    int rows = rowSpin->value();
-    int cols = colSpin->value();
-
-    for (int r = 0; r < rows; ++r) {
-        for (int c = 0; c < cols; ++c) {
-            QLineEdit* edit = new QLineEdit(this);
-            edit->setAlignment(Qt::AlignCenter);
-            edit->setText("0");
-            edit->setMaximumWidth(60);
-            matrixLayout->addWidget(edit, r, c);
-        }
-    }
+    ImplataMatrixSize();
 }
 
 void MathResult::processMatrix() {
@@ -201,9 +222,8 @@ void MathResult::processMatrix() {
         }
     }
 
-    // Вывод матрицы с черным цветом текста
     resultLabel->setText(matrixToString(matrix));
-    resultLabel->setStyleSheet("QLabel { color: black; font-weight: bold; }");
+    resultLabel->setAlignment(Qt::AlignCenter); // Центрируем текст результата
 }
 
 void MathResult::clearLayout() {
@@ -215,5 +235,3 @@ void MathResult::clearLayout() {
         delete item;
     }
 }
-
-
