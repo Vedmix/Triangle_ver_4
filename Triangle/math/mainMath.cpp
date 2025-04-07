@@ -4,6 +4,7 @@
 #include "SolveSyst.h"
 #include "generalMathFunctions.h"
 #include "fraction.h"
+#include "vectors.h";
 #include <cmath>
 using namespace std;
 
