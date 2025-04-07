@@ -203,6 +203,8 @@ Matrix::Matrix(const string& filename){
             down=1;
         }
     }
+    delete[] token;
+    delete[] num;
     file.close();
 }
 
