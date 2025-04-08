@@ -1,5 +1,5 @@
 #include "secmathwindow.h"
-#include "mathresult.h" // Добавлен заголовочный файл для MathResult
+#include "mathresult.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>

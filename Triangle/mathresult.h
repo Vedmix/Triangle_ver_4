@@ -41,6 +41,7 @@ private:
 
     QGridLayout* matrixLayout;
     QLabel* resultLabel;
+    QLabel* determinantLabel;
     QPushButton* processButton;
     QSpinBox* rowSpin;
     QSpinBox* colSpin;

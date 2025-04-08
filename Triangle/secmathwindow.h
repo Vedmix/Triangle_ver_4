@@ -15,7 +15,7 @@ private slots:
     void showMatrixContent();
     void showComplexNumbersContent();
     void keyPressEvent(QKeyEvent *event);
-    void openMathResult(); // Добавлен слот для открытия MathResult
+    void openMathResult();
 
 private:
     QStackedWidget *stackedWidget;
