@@ -1,6 +1,9 @@
 #include "generalMathFunctions.h"
 #include <cmath>
+#include <iostream>
+#include "matrix.h"
 #include "fraction.h"
+using namespace std;
 
 int foundGCD(int a, int b){
     a=abs(a);
@@ -32,6 +35,35 @@ Fraction* substructVectors(Fraction* vec1, Fraction* vec2, int n){
         vecRes[i] = vec1[i]-vec2[i];
     }
     return vecRes;
+}
+
+Vectors* vectProd(Vectors** vecs, int n){
+    if((*vecs)[0].getLen()-1 != n){
+        throw invalid_argument("Не найти векторное произведение");
+        return nullptr;
+    }
+
+    Matrix mtxDet(n, n);
+    Vectors* res = new Vectors(n+1);
+    int mtxCols=0;
+    for(int i=0;i<n+1;i++){
+        for(int j=0; j<n;j++){
+            mtxCols=0;
+            for(int k=0;k<n+1;k++){
+                if(i!=k){
+                    mtxDet(j, mtxCols) = (*vecs[j])(k);
+                    mtxCols++;
+                }
+            }
+        }
+        if((i+1)%2==0){
+            (*res)(i) = (mtxDet.determinant())*(-1);
+        }
+        else{
+            (*res)(i) = mtxDet.determinant();
+        }
+    }
+    return res;
 }
 
 Fraction* multVectByNum(Fraction* vec, int n, Fraction cff){

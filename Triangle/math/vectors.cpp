@@ -14,6 +14,7 @@ Vectors::Vectors(int ln, Fraction* vcInp){
     for(int i=0; i<len;i++){
         vec[i] = vcInp[i];
     }
+    countMod();
 }
 
 Vectors::Vectors(int ln){
@@ -23,6 +24,7 @@ Vectors::Vectors(int ln){
     for(int i=0; i<len;i++){
         vec[i] = defValue;
     }
+    countMod();
 }
 
 Vectors::Vectors(const string& filename) {
@@ -94,9 +96,19 @@ Vectors::Vectors(const string& filename) {
     delete[] token;
     delete[] num;
     file.close();
+    countMod();
 }
 
-Vectors::~Vectors(){
+void Vectors::countMod(){
+    double n=0.0;
+    for(int i=0;i<len;i++){
+        double value = static_cast<double>(vec[i].getUp()) / vec[i].getDown();
+        n += (value * value);
+    }
+    mod = sqrt(n);
+}
+
+Vectors::~Vectors() {
     delete[] vec;
 }
 
@@ -131,6 +143,18 @@ Vectors Vectors::operator-(const Vectors& vec1) const{
     return res;
 }
 
+Fraction Vectors::operator*(const Vectors& vec1) const{
+    if(vec1.getLen()!=this->getLen()){
+        throw invalid_argument("Векторы разной длины!");
+        return Fraction(0, 1);
+    }
+    Fraction res(0, 1);
+    for(int i=0; i<vec1.getLen();i++){
+        res = res + (vec1(i)*(*this)(i));
+    }
+    return res;
+}
+
 Vectors& Vectors::operator=(const Vectors& other){
     if (this == &other) {
         return *this;
@@ -156,6 +180,9 @@ void Vectors::inputVector(Fraction* vcInp){
 
 int Vectors::getLen(){return len;}
 int Vectors::getLen()const{return len;}
+
+double Vectors::getMod(){return mod;}
+double Vectors::getMod()const{return mod;}
 
 void Vectors::printVectorSimple(){
     for(int i=0; i<len;i++){
