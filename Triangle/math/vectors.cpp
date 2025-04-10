@@ -129,6 +129,7 @@ Vectors Vectors::operator+(const Vectors& vec1) const{
     for(int i=0;i<this->getLen();i++){
         res.vec[i] = this->vec[i]+vec1.vec[i];
     }
+    res.countMod();
     return res;
 }
 
@@ -140,6 +141,7 @@ Vectors Vectors::operator-(const Vectors& vec1) const{
     for(int i=0;i<this->getLen();i++){
         res.vec[i] = this->vec[i]-vec1.vec[i];
     }
+    res.countMod();
     return res;
 }
 
@@ -163,13 +165,68 @@ Vectors& Vectors::operator=(const Vectors& other){
     delete[] vec;
 
     len = other.len;
-
+    mod = other.mod;
     vec = new Fraction[len];
     for (int i=0; i<len; i++) {
         vec[i] = other.vec[i];
     }
 
     return *this;
+}
+
+Vectors& Vectors::operator*(const Fraction& scalar) const{
+    Vectors* res = new Vectors(len);
+    for(int i=0;i<len;i++){
+        (*res)(i) = vec[i]*scalar;
+    }
+    res->countMod();
+    return *res;
+}
+
+Vectors& Vectors::operator/(const Fraction& scalar) const{
+    Vectors* res = new Vectors(len);
+    for(int i=0;i<len;i++){
+        (*res)(i) = vec[i]/scalar;
+    }
+    res->countMod();
+    return *res;
+}
+
+Vectors& Vectors::operator*(const int scalar) const{
+    Vectors* res = new Vectors(len);
+    for(int i=0;i<len;i++){
+        (*res)(i) = vec[i]*scalar;
+    }
+    res->countMod();
+    return *res;
+}
+
+Vectors& Vectors::operator/(const int scalar) const{
+    Vectors* res = new Vectors(len);
+    for(int i=0;i<len;i++){
+        (*res)(i) = vec[i]/scalar;
+    }
+    res->countMod();
+    return *res;
+}
+
+bool Vectors::isOrthogonal(Vectors* other){
+    if(((*this)*(*other)).getUp()==0){
+        return true;
+    }
+    return false;
+}
+
+double Vectors::angle(Vectors* other){
+    Fraction sc = ((*this)*(*other));
+    double md = this->getMod() * other->getMod();
+    double cos;
+    if(md < 1e-7){
+        cout << "Ошибка: произведение модулей равно нулю! (значение угла - 0)" << '\n';
+        return 0.0;
+    }
+    cos = (static_cast<double>(sc.getUp()) / sc.getDown())/md;
+    return acos(cos);
 }
 
 void Vectors::inputVector(Fraction* vcInp){
@@ -183,6 +240,8 @@ int Vectors::getLen()const{return len;}
 
 double Vectors::getMod(){return mod;}
 double Vectors::getMod()const{return mod;}
+
+void Vectors::setMod(double module){mod = module;}
 
 void Vectors::printVectorSimple(){
     for(int i=0; i<len;i++){

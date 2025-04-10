@@ -15,8 +15,17 @@ int main()
     // Инициализация каждого элемента с нужными аргументами
     vecs[0] = new Vectors(3, new Fraction[3]{Fraction(1, 1), Fraction(2, 1), Fraction(3, 1)});  // Пример с конструктором Vectors(int ln, Fraction* vcInp)
     vecs[1] = new Vectors(3, new Fraction[3]{Fraction(4, 1), Fraction(5, 1), Fraction(6, 1)});    // Другой пример vecs = new Vectors[2];
+    Fraction sc(2, 1);
     Vectors* vecRes = new Vectors(3);
     vecRes = vectProd(vecs, 2);
     vecRes->printVectorSimple();
+    Vectors* vecRes2 = new Vectors(3);
+    *vecRes2 = (*vecRes)*sc;
+    vecRes2->printVectorSimple();
+    if(vec.isOrthogonal(&vec1)){
+        cout << "ok" << '\n';
+    }
+    double ang = vec.angle(&vec1);
+    cout << ang << '\n';
     return 0;
 }

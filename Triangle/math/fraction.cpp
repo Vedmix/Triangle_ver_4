@@ -83,6 +83,22 @@ Fraction Fraction::operator*(const int n1) const{
     return res;
 }
 
+Fraction Fraction::operator/(const int n1) const{
+    Fraction res(0, 0);
+    res.up = up;
+    res.down = down*n1;
+    if(res.up<0 && res.down<0){
+        res.up = -res.up;
+        res.down = -res.down;
+    }
+    else if(res.down<0){
+        res.up = -res.up;
+        res.down = -res.down;
+    }
+    res.fractionReduction();
+    return res;
+}
+
 Fraction Fraction::operator/(const Fraction& frc) const{
     Fraction res(0, 0);
     res.up = up*frc.down;

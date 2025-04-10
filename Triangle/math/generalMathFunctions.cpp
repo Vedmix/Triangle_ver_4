@@ -63,6 +63,12 @@ Vectors* vectProd(Vectors** vecs, int n){
             (*res)(i) = mtxDet.determinant();
         }
     }
+    double m=0.0;
+    for(int i=0;i<res->getLen();i++){
+        double value = static_cast<double>((*res)(i).getUp()) / (*res)(i).getDown();
+        m += (value * value);
+    }
+    res->setMod(sqrt(m));
     return res;
 }
 
