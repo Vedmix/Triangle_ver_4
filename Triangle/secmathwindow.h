@@ -15,25 +15,17 @@ private slots:
     void showMatrixContent();
     void showComplexNumbersContent();
     void keyPressEvent(QKeyEvent *event);
-
-    void handleMatrixButton1();
-    void handleMatrixButton2();
-    void handleMatrixButton3();
-    void handleMatrixButton4();
-    void handleMatrixButton5();
+    void openMathResult();
 
 private:
     QStackedWidget *stackedWidget;
+    QPushButton *matrixButton1;
+    QPushButton *matrixButton2;
+    QPushButton *matrixButton3;
+    QPushButton *matrixButton4;
 
     QWidget *createMatrixWidget();
     QWidget *createComplexNumbersWidget();
-
-    QPushButton *button1;
-    QPushButton *button2;
-    QPushButton *button3;
-    QPushButton *button4;
-    QPushButton *button5;
-    QVBoxLayout *buttonLayout;
 };
 
 #endif
