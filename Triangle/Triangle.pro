@@ -16,6 +16,7 @@ SOURCES += \
     geometrywindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    math/vectors.cpp \
     mathresult.cpp \
     mathwindow.cpp \
     secmathwindow.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     geometryresult.h \
     geometrywindow.h \
     mainwindow.h \
+    math/vectors.h \
     mathresult.h \
     mathwindow.h \
     secmathwindow.h \
