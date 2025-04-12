@@ -68,6 +68,23 @@ std::vector<double> Tetragon::calculateDiagonals() const {
     };
 }
 
+std::vector<std::string> Tetragon::typeOfTetragon() const{
+
+    double cross_a = (bx - ax) * (dy - ay) - (by - ay) * (dx - ax);
+    double cross_b = (cx - bx) * (ay - by) - (cy - by) * (ax - bx);
+    double cross_c = (dx - cx) * (by - cy) - (dy - cy) * (bx - cx);
+    double cross_d = (ax - dx) * (cy - dy) - (ay - dy) * (cx - dx);
+
+    if (((cross_a > 0) && (cross_b > 0) && (cross_c > 0) && (cross_d > 0)) || ((cross_a < 0) && (cross_b < 0) && (cross_c < 0) && (cross_d < 0))){
+        return {"выпуклый"};
+    } else {
+        return {"вогнутый"};
+    }
+}
+
+std::vector<std::string> Tetragon::getType() const{
+    return typeOfTetragon();
+}
 std::vector<bool> Tetragon::parallel() const {
     auto v = vectorTetra();
     const auto& ab = v[0];
