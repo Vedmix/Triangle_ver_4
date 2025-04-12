@@ -7,8 +7,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
-    geometry/graphics/Triangle/triangle.cpp \
-    geometry/graphics/Triangle/trianglegraphic.cpp \
+    geometry/Triangle/triangle.cpp \
+    geometry/Triangle/trianglegraphic.cpp \
+    geometry/Triangle/triangle.cpp \
+    geometry/Triangle/trianglegraphic.cpp \
     math/matrix.cpp \
     math/fraction.cpp \
     math/generalMathFunctions.cpp \
@@ -22,8 +24,10 @@ SOURCES += \
     secmathwindow.cpp \
 
 HEADERS += \
-    geometry/graphics/Triangle/triangle.h \
-    geometry/graphics/Triangle/trianglegraphic.h \
+    geometry/Triangle/triangle.h \
+    geometry/Triangle/trianglegraphic.h \
+    geometry/Triangle/triangle.h \
+    geometry/Triangle/trianglegraphic.h \
     math/matrix.h \
     math/fraction.h \
     math/generalMathFunctions.h \

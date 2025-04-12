@@ -69,6 +69,15 @@ std::vector<double> Tetragon::calculateDiagonals() const {
 }
 
 std::vector<std::string> Tetragon::typeOfTetragon() const{
+    auto par = parallel();
+    bool parallel_abcd = par[0];
+    bool parallel_bcda = par[1];
+
+    auto angles = calculateAngles();
+    double a_angle = angles[0], b_angle = angles[1], c_angle = angles[2], d_angle = angles[3];
+
+    auto sides = calculateSides();
+    double ab = sides[0], bc = sides[1], cd = sides[2], da = sides[2];
 
     double cross_a = (bx - ax) * (dy - ay) - (by - ay) * (dx - ax);
     double cross_b = (cx - bx) * (ay - by) - (cy - by) * (ax - bx);
@@ -76,9 +85,25 @@ std::vector<std::string> Tetragon::typeOfTetragon() const{
     double cross_d = (ax - dx) * (cy - dy) - (ay - dy) * (cx - dx);
 
     if (((cross_a > 0) && (cross_b > 0) && (cross_c > 0) && (cross_d > 0)) || ((cross_a < 0) && (cross_b < 0) && (cross_c < 0) && (cross_d < 0))){
-        return {"выпуклый"};
-    } else {
-        return {"вогнутый"};
+            if (parallel_abcd && parallel_bcda) {
+            if (ab == bc && ab == cd && ab == da) {
+                if (a_angle == 90.0 && b_angle == 90.0 &&
+                    c_angle == 90.0 && d_angle == 90.0) {
+                    return {"выпуклый","квадрат"};
+                }
+                return {"ромб"};
+            } else if (a_angle == 90.0 && b_angle == 90.0 &&
+                    c_angle == 90.0 && d_angle == 90.0) {
+                return {"выпуклый","прямоугольник"};
+            }
+            return {"параллелограмм"};
+        } else if (parallel_abcd || parallel_bcda) {
+            return {"выпуклый","трапеция"};
+        }
+        return {"выпуклый","произвольный четырехугольник"};
+    }
+    else {
+        return {"вогнутый","произвольный четырехугольник"};
     }
 }
 
