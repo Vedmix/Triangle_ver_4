@@ -5,7 +5,6 @@
 class Tetragon {
 private:
     double ax, ay, bx, by, cx, cy, dx, dy;
-    double s, p;
 
     std::vector<double> calculateSides() const;
     std::vector<double> calculateAngles() const;
@@ -20,8 +19,8 @@ public:
     std::vector<double> getSides() const;
     std::vector<double> getAngles() const;
     std::vector<double> getDiagonals() const;
-    std::vector<double> getSquare() const;
-    std::vector<double> getPerimeter() const;
+    double getSquare() const;
+    double getPerimeter() const;
     std::vector<std::vector<double>> getVectors() const;
-    std::vector<double> parallel() const;
+    std::vector<bool> parallel() const;
 };

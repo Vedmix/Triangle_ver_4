@@ -14,8 +14,13 @@ Tetragon::Tetragon(double x1, double y1, double x2, double y2,
     }
 }
 
-s= 0.5 * fabs((ax*by + bx*cy + cx*dy + dx*ay) - (ay*bx + by*cx + cy*dx + dy*ax));
-p = sqrt(pow(bx-ax,2) + pow(by-ay,2)) +  sqrt(pow(cx-bx,2) + pow(cy-by,2)) + sqrt(pow(dx-cx,2) + pow(dy-cy,2)) + sqrt(pow(dx-ax,2) + pow(dy-ay,2));
+double Tetragon::getSquare() const {
+    return 0.5 * fabs((ax*by + bx*cy + cx*dy + dx*ay) - (ay*bx + by*cx + cy*dx + dy*ax));
+}
+
+double Tetragon::getPerimeter() const {
+    return sqrt(pow(bx-ax,2) + pow(by-ay,2)) +  sqrt(pow(cx-bx,2) + pow(cy-by,2)) + sqrt(pow(dx-cx,2) + pow(dy-cy,2)) + sqrt(pow(dx-ax,2) + pow(dy-ay,2));
+}
 
 std::vector<double> Tetragon::calculateSides() const {
     return {
@@ -63,7 +68,7 @@ std::vector<double> Tetragon::calculateDiagonals() const {
     };
 }
 
-std::vector<double> Tetragon::parallel() const {
+std::vector<bool> Tetragon::parallel() const {
     auto v = vectorTetra();
     const auto& ab = v[0];
     const auto& cd = v[2];
@@ -73,7 +78,10 @@ std::vector<double> Tetragon::parallel() const {
     double abcd = ab[0]*cd[1] - ab[1]*cd[0];
     double bcda = bc[0]*da[1] - bc[1]*da[0];
 
-    return {abcd, bcda};
+    bool abcdBool = (abcd == 0.0);
+    bool bcdaBool = (bcda == 0.0);
+
+    return {abcdBool, bcdaBool};
 }
 
 std::vector<double> Tetragon::getSides() const {
@@ -86,14 +94,6 @@ std::vector<double> Tetragon::getAngles() const {
 
 std::vector<double> Tetragon::getDiagonals() const {
     return calculateDiagonals();
-}
-
-std::vector<double> Tetragon::getSquare() const {
-    return s;
-}
-
-std::vector<double> Tetragon::getPerimeter() const {
-    return p;
 }
 
 std::vector<std::vector<double>> Tetragon::getVectors() const {
