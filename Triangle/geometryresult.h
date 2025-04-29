@@ -8,8 +8,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QFormLayout>
-#include "geometry/graphics/Triangle/trianglegraphic.h"
-#include "geometry/graphics/Triangle/triangle.h"
+#include "geometry/Triangle/trianglegraphic.h"
+#include "geometry/Triangle/triangle.h"
+#include "geometry/Tetragon/tetragongraphic.h"
+#include "geometry/Tetragon/tetragon.h"
 
 class GeometryResult : public QWidget
 {
@@ -24,14 +26,16 @@ protected:
 
 private slots:
     void updateTriangleInfo();
+    void updateTetragonInfo();
 
 private:
     QFormLayout* formLayout;
 
     QStackedWidget *stackedWidget;
     TriangleGraphic *triangleGraphic;
+    TetragonGraphic *tetragonGraphic;
 
-    QLineEdit *axEdit, *ayEdit, *bxEdit, *byEdit, *cxEdit, *cyEdit;
+    QLineEdit *axEdit, *ayEdit, *bxEdit, *byEdit, *cxEdit, *cyEdit, *dxEdit, *dyEdit;
     QLabel *infoLabel;
 
     QWidget* createTriangleWidget();

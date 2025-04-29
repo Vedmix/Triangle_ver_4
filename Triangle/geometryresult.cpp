@@ -177,10 +177,147 @@ void GeometryResult::keyPressEvent(QKeyEvent *event) {
 }
 
 QWidget* GeometryResult::createTetragonWidget() {
-    QWidget *widget = new QWidget();
-    widget->setLayout(new QVBoxLayout());
-    widget->layout()->addWidget(new QLabel("Четырехугольник (в разработке)"));
+    QWidget* widget = new QWidget();
+    QHBoxLayout* mainLayout = new QHBoxLayout(widget);
+
+    QWidget* leftPanel = new QWidget();
+    leftPanel->setMaximumWidth(400);
+    leftPanel->setStyleSheet("QLabel { color: black; }");
+
+    QVBoxLayout* leftLayout = new QVBoxLayout(leftPanel);
+
+    QFormLayout* formLayout = new QFormLayout();
+
+    QHBoxLayout* pointALayout = new QHBoxLayout();
+    QHBoxLayout* pointBLayout = new QHBoxLayout();
+    QHBoxLayout* pointCLayout = new QHBoxLayout();
+    QHBoxLayout* pointDLayout = new QHBoxLayout();
+
+    axEdit = new QLineEdit("-5");
+    ayEdit = new QLineEdit("0");
+    pointALayout->addWidget(new QLabel("Ax:"));
+    pointALayout->addWidget(axEdit);
+    pointALayout->addWidget(new QLabel("Ay:"));
+    pointALayout->addWidget(ayEdit);
+    pointALayout->addStretch();
+
+    bxEdit = new QLineEdit("-5");
+    byEdit = new QLineEdit("5");
+    pointBLayout->addWidget(new QLabel("Bx:"));
+    pointBLayout->addWidget(bxEdit);
+    pointBLayout->addWidget(new QLabel("By:"));
+    pointBLayout->addWidget(byEdit);
+    pointBLayout->addStretch();
+
+    cxEdit = new QLineEdit("10");
+    cyEdit = new QLineEdit("5");
+    pointCLayout->addWidget(new QLabel("Cx:"));
+    pointCLayout->addWidget(cxEdit);
+    pointCLayout->addWidget(new QLabel("Cy:"));
+    pointCLayout->addWidget(cyEdit);
+    pointCLayout->addStretch();
+
+    dxEdit = new QLineEdit("10");
+    dyEdit = new QLineEdit("0");
+    pointDLayout->addWidget(new QLabel("Dx:"));
+    pointDLayout->addWidget(dxEdit);
+    pointDLayout->addWidget(new QLabel("Dy:"));
+    pointDLayout->addWidget(dyEdit);
+    pointDLayout->addStretch();
+
+    formLayout->addRow(pointALayout);
+    formLayout->addRow(pointBLayout);
+    formLayout->addRow(pointCLayout);
+    formLayout->addRow(pointDLayout);
+
+    leftLayout->addLayout(formLayout);
+
+    QPushButton *updateButton = new QPushButton("Обновить координаты");
+    updateButton->setStyleSheet("background-color: white; color: black; padding: 8px;");
+
+    infoLabel = new QLabel();
+    infoLabel->setWordWrap(true);
+    QFont font;
+    font.setFamily("Arial");
+    infoLabel->setFont(font);
+    infoLabel->setStyleSheet("color: black;");
+
+    leftLayout->addWidget(updateButton);
+    leftLayout->addWidget(infoLabel);
+
+    tetragonGraphic = new TetragonGraphic();
+    tetragonGraphic->setMinimumSize(600, 600);
+    tetragonGraphic->setFocus();
+
+    mainLayout->addWidget(leftPanel, 1);
+    mainLayout->addWidget(tetragonGraphic, 2);
+
+    connect(updateButton, &QPushButton::clicked, this, &GeometryResult::updateTetragonInfo);
+
+    updateTetragonInfo();
+
     return widget;
+}
+
+void GeometryResult::updateTetragonInfo() {
+    double ax = axEdit->text().toDouble();
+    double ay = ayEdit->text().toDouble();
+    double bx = bxEdit->text().toDouble();
+    double by = byEdit->text().toDouble();
+    double cx = cxEdit->text().toDouble();
+    double cy = cyEdit->text().toDouble();
+    double dx = dxEdit->text().toDouble();
+    double dy = dyEdit->text().toDouble();
+
+    try {
+        Tetragon tetragon(ax, ay, bx, by, cx, cy, dx, dy);
+        tetragonGraphic->setTetragonCoordinates(ax, ay, bx, by, cx, cy, dx, dy);
+
+        auto sides = tetragon.getSides();
+        auto angles = tetragon.getAngles();
+        auto type = tetragon.getType();
+        auto square = tetragon.getSquare();
+        auto perimeter = tetragon.getPerimeter();
+
+
+        QString info = QString(
+            "<b>Тип:</b><br>"
+            "%1<br><br>"
+            "%2<br><br>"
+            "<b>Периметр:</b><br>"
+            "P = %3<br><br>"
+            "<b>Площадь:</b><br>"
+            "S = %4<br><br>"
+            "<b>Стороны:</b><br>"
+            "AB: %5<br>BC: %6<br>AC: %7<br><br>"
+            "<b>Углы:</b><br>"
+            "∠A: %8°<br>∠B: %9°<br>∠C: %10°<br>∠D: %11°<br><br>"
+         ).arg(QString::fromStdString(type[0]))
+         .arg(QString::fromStdString(type[1]))
+         .arg(perimeter, 0, 'f', 3)
+         .arg(square, 0, 'f', 3)
+         .arg(sides[0], 0, 'f', 3)
+         .arg(sides[1], 0, 'f', 3)
+         .arg(sides[2], 0, 'f', 3)
+         .arg(angles[0], 0, 'f', 3)
+         .arg(angles[1], 0, 'f', 3)
+         .arg(angles[2], 0, 'f', 3)
+         .arg(angles[3], 0, 'f', 3);
+
+         infoLabel->setStyleSheet(
+               "font-family: Arial;"
+               "color: black;"
+               "font-size: 20px;"
+               "padding: 5px;"
+               "background-color: #f5f5f5;"
+               "border: 1px solid #ddd;"
+               "border-radius: 4px;"
+           );
+
+        infoLabel->setText(info);
+    } catch (...) {
+        infoLabel->setText("<span style='color:red;'>Ошибка! Невозможно построить треугольник</span>");
+    }
 }
 
 QWidget* GeometryResult::createEllipseWidget() {
