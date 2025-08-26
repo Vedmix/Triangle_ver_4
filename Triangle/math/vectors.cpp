@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "vectors.h"
-#include "fraction.h"
+#include "vectors.hpp"
+#include "fraction.hpp"
 #include <cmath>
 #include <cstring>
-#include "generalMathFunctions.h"
+#include "generalMathFunctions.hpp"
 using namespace std;
 
 Vectors::Vectors(int ln, Fraction* vcInp){

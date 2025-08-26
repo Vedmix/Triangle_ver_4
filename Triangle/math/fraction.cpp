@@ -1,6 +1,6 @@
 #include <iostream>
-#include "fraction.h"
-#include "generalMathFunctions.h"
+#include "fraction.hpp"
+#include "generalMathFunctions.hpp"
 using namespace std;
 
 Fraction::Fraction(int n1, int n2)
@@ -145,6 +145,8 @@ bool Fraction::operator==(const Fraction& frc)const{
     return false;
 }
 
+
+
 void Fraction::fractionReduction(){
     if(down==0){
         return;
@@ -164,6 +166,14 @@ void Fraction::printFraction(){
     else{
         cout << up << '/' << down;
     }
+}
+
+double Fraction::fracToDouble(){
+    if(getDown()!=0){
+        return getUp()/getDown();
+    }
+    cout << "Знаменатель 0!\n";
+    return 0;
 }
 
 void Fraction::setFraction(int n1, int n2){up=n1;down=n2;}

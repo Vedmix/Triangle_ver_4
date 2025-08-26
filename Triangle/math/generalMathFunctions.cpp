@@ -1,8 +1,8 @@
-#include "generalMathFunctions.h"
+#include "generalMathFunctions.hpp"
 #include <cmath>
 #include <iostream>
-#include "matrix.h"
-#include "fraction.h"
+#include "matrix.hpp"
+#include "fraction.hpp"
 using namespace std;
 
 int foundGCD(int a, int b){

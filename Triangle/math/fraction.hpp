@@ -17,6 +17,8 @@ public:
     Fraction& operator=(const Fraction& frc);
     bool operator==(const Fraction& frc);
     bool operator==(const Fraction& frc) const;
+    bool operator>(const Fraction& frc);
+    bool operator<(const Fraction& frc);
     void setFraction(int n1, int n2);
     void fractionReduction(); //Сокращение дроби
     void printFraction();
@@ -24,5 +26,6 @@ public:
     int getDown();
     int getUp() const;
     int getDown() const;
+    double fracToDouble();
 };
  

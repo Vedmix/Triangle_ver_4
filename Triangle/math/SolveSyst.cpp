@@ -1,10 +1,10 @@
 #include <iostream>
 #include <fstream>
-#include "matrix.h"
+#include "matrix.hpp"
 #include <sstream>
-#include "SolveSyst.h"
+#include "SolveSyst.hpp"
 #include <cstring>
-#include "fraction.h"
+#include "fraction.hpp"
 #include <cmath>
 using namespace std;
 

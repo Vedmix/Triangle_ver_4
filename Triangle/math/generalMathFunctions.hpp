@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
-#include "fraction.h"
-#include "vectors.h"
+#include "fraction.hpp"
+#include "vectors.hpp"
 
 int foundGCD(int a, int b); //Поиск Наибольщего общего делителя
 int foundLCM(int a, int b); //Поиск Наименьшего общего кратного

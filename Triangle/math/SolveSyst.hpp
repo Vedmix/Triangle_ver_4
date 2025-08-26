@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "matrix.h"
-#include "SolveSyst.h"
-#include "fraction.h"
+#include "matrix.hpp"
+#include "SolveSyst.hpp"
+#include "fraction.hpp"
 #include <cmath>
 using namespace std;
 

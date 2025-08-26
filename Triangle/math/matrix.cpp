@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "matrix.h"
-#include "fraction.h"
+#include "matrix.hpp"
+#include "fraction.hpp"
 #include <cmath>
 #include <cstring>
-#include "generalMathFunctions.h"
+#include "generalMathFunctions.hpp"
 using namespace std;
 
 Fraction& Matrix::operator()(int row, int col)

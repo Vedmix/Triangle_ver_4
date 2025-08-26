@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "fraction.h"
+#include "fraction.hpp"
 
 class Vectors
 {
