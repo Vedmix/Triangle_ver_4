@@ -24,6 +24,7 @@ public:
     void inputSystem(Fraction** input);
     SystemOfEquations(const string& filename);
     ~SystemOfEquations();
+    void inputSystemFromFile(const string& filename);
     bool isSuccess();
     void Solve();
 };

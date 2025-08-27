@@ -187,6 +187,10 @@ void SystemOfEquations::SolveGaussMethod(){
     success=true;
 }
 
+void SystemOfEquations::inputSystemFromFile(const string& filename){
+
+}
+
 bool SystemOfEquations::isSuccess(){return success;}
 
 void SystemOfEquations::Solve(){
