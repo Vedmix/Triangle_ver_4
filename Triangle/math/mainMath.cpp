@@ -11,9 +11,13 @@ using namespace std;
 
 int main()
 {
-    CmplxNum num(4, 1);
-    CmplxNum num2(Fraction(4, 0), Fraction(2, 1));
-    Fraction frc(-5, 1);
-    frc.printFraction(); cout << '\n';
+    CmplxNum num1(4, 1), num2(0, 0), num3(-3, -5), num4(-3, 5), num5(0, 4);
+    num1.print(); cout << '\n';
+    num2.print(); cout << '\n';
+    num3.print(); cout << '\n';
+    num4.print(); cout << '\n';
+    if(Fraction(-5, 1)>Fraction(0, 1)){
+        cout << "incorr";
+    }
     return 0;
 }

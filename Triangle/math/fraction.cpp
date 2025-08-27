@@ -145,6 +145,61 @@ bool Fraction::operator==(const Fraction& frc)const{
     return false;
 }
 
+bool Fraction::operator>(const Fraction& frc){
+    Fraction frc2 = frc;
+    Fraction frc1 = *this;
+    frc1.fractionReduction();
+    frc2.fractionReduction();
+    int lcm = foundLCM(frc1.down, frc2.down);
+    frc1.down = lcm; frc2.down = lcm;
+    frc1.up = frc1.up * (lcm/this->down); frc2.up = frc2.up * (lcm/frc.down);
+    if(frc1.up>frc2.up){
+        return true;
+    }
+    return false;
+}
+
+bool Fraction::operator<(const Fraction& frc){
+    Fraction frc2 = frc;
+    Fraction frc1 = *this;
+    frc1.fractionReduction();
+    frc2.fractionReduction();
+    int lcm = foundLCM(frc1.down, frc2.down);
+    frc1.down = lcm; frc2.down = lcm;
+    frc1.up = frc1.up * (lcm/this->down); frc2.up = frc2.up * (lcm/frc.down);
+    if(frc1.up<frc2.up){
+        return true;
+    }
+    return false;
+}
+
+bool Fraction::operator>(const Fraction& frc)const{
+    Fraction frc2 = frc;
+    Fraction frc1 = *this;
+    frc1.fractionReduction();
+    frc2.fractionReduction();
+    int lcm = foundLCM(frc1.down, frc2.down);
+    frc1.down = lcm; frc2.down = lcm;
+    frc1.up = frc1.up * (lcm/this->down); frc2.up = frc2.up * (lcm/frc.down);
+    if(frc1.up>frc2.up){
+        return true;
+    }
+    return false;
+}
+
+bool Fraction::operator<(const Fraction& frc)const{
+    Fraction frc2 = frc;
+    Fraction frc1 = *this;
+    frc1.fractionReduction();
+    frc2.fractionReduction();
+    int lcm = foundLCM(frc1.down, frc2.down);
+    frc1.down = lcm; frc2.down = lcm;
+    frc1.up = frc1.up * (lcm/this->down); frc2.up = frc2.up * (lcm/frc.down);
+    if(frc1.up<frc2.up){
+        return true;
+    }
+    return false;
+}
 
 void Fraction::fractionReduction(){
     if(down==0){
@@ -159,6 +214,10 @@ void Fraction::fractionReduction(){
 }
 
 void Fraction::printFraction(){
+    if(down<0){
+        down*=-1;
+        up*=-1;
+    }
     if(up==0 || down ==1){
         cout << up;
     }
@@ -173,6 +232,20 @@ double Fraction::fracToDouble(){
     }
     cout << "Знаменатель 0!\n";
     return 0;
+}
+
+Fraction Fraction::absFr(){
+    if(down<0){
+        down*=-1;
+        up*=-1;
+    }
+    Fraction res;
+    if(up<0){
+        res.setFraction(-up, down);
+        return res;
+    }
+    res = *this;
+    return res;
 }
 
 void Fraction::setFraction(int n1, int n2){up=n1;down=n2;}

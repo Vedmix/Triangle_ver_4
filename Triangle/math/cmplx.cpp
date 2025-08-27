@@ -70,10 +70,23 @@ CmplxNum CmplxNum::operator*(const CmplxNum& other){
 
 CmplxNum CmplxNum::operator/(const CmplxNum& other){
     Fraction a = this->re, b = this->im, c = other.re, d=other.im;
+    if(c.getUp() == 0 && d.getUp()==0){
+        throw std::domain_error("Деление на 0!");
+    }
     CmplxNum res((a*c + b*d)/(c*c + d*d), (b*c - a*d)/(c*c + d*d));
     return res;
 }
 
 void CmplxNum::print(){
-    re.printFraction();
+    if(re.getUp()!=0 || im.getUp()==0){
+        re.printFraction();std::cout << ' ';
+    }
+    if(im > Fraction(0, 1)){
+        std::cout << "+ "; im.printFraction(); std::cout << 'i';
+    }
+    else if(im < Fraction(0, 1)){
+        std::cout << "- "; im.absFr().printFraction(); std::cout << 'i';
+    }
 }
+
+double CmplxNum::getMod(){return mod;}

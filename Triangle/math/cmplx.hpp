@@ -1,5 +1,6 @@
 #pragma once
 #include "fraction.hpp"
+#include <stdexcept>
 
 class CmplxNum
 {

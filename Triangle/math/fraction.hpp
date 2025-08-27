@@ -19,9 +19,12 @@ public:
     bool operator==(const Fraction& frc) const;
     bool operator>(const Fraction& frc);
     bool operator<(const Fraction& frc);
+    bool operator>(const Fraction& frc) const;
+    bool operator<(const Fraction& frc) const;
     void setFraction(int n1, int n2);
     void fractionReduction(); //Сокращение дроби
     void printFraction();
+    Fraction absFr();
     int getUp();
     int getDown();
     int getUp() const;
