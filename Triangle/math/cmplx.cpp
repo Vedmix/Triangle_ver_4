@@ -5,23 +5,25 @@
 CmplxNum::CmplxNum(){
     re=Fraction(0, 1);
     im=Fraction(0, 1);
-    mod=0;
-    hasMod=true;
+    countMod();
 }
 
 CmplxNum::CmplxNum(int real, int imag){
     re=Fraction(real, 1);
     im=Fraction(imag, 1);
-    double reD = re.fracToDouble();
-    double imD = im.fracToDouble();
-    mod = sqrt(reD*reD + imD*imD);
-    hasMod=true;
+    countMod();
 }
 
 CmplxNum::CmplxNum(Fraction real, Fraction imag){
     re=real;
     im=imag;
-    if(real.getDown()!=0 && imag.getDown()!=0){
+    countMod();
+}
+
+CmplxNum::~CmplxNum(){}
+
+void CmplxNum::countMod(){
+    if(re.getDown()!=0 && im.getDown()!=0){
         double reD = re.fracToDouble();
         double imD = im.fracToDouble();
         mod = sqrt(reD*reD + imD*imD);
@@ -31,8 +33,6 @@ CmplxNum::CmplxNum(Fraction real, Fraction imag){
         hasMod = false;
     }
 }
-
-CmplxNum::~CmplxNum(){}
 
 CmplxNum CmplxNum::operator=(const CmplxNum& other){
     if(this==&other){
@@ -44,14 +44,16 @@ CmplxNum CmplxNum::operator=(const CmplxNum& other){
     if(hasMod){
         mod = other.mod;
     }
-    else{
-        mod = NULL;
-    }
     return *this;
 }
 
 CmplxNum CmplxNum::operator+(const CmplxNum& other){
     CmplxNum res(this->re+other.re, this->im + other.im);
+    return res;
+}
+
+CmplxNum CmplxNum::operator+(const int num){
+    CmplxNum res(this->re + Fraction(num, 1), this->im);
     return res;
 }
 
@@ -61,6 +63,17 @@ CmplxNum CmplxNum::operator-(const CmplxNum& other){
 }
 
 CmplxNum CmplxNum::operator*(const CmplxNum& other){
-    CmplxNum res(this->re*other.re - this->im*other.im, this->re*other.im+this->im*other.re);
+    Fraction a = this->re, b = this->im, c = other.re, d=other.im;
+    CmplxNum res(a*c - b*d, a*d + b*c);
     return res;
+}
+
+CmplxNum CmplxNum::operator/(const CmplxNum& other){
+    Fraction a = this->re, b = this->im, c = other.re, d=other.im;
+    CmplxNum res((a*c + b*d)/(c*c + d*d), (b*c - a*d)/(c*c + d*d));
+    return res;
+}
+
+void CmplxNum::print(){
+    re.printFraction();
 }

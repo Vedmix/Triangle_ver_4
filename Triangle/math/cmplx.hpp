@@ -18,6 +18,7 @@ public:
     CmplxNum operator/(const CmplxNum& other);
     CmplxNum operator*(const CmplxNum& other);
     CmplxNum operator+(const int num);
+    void countMod();
     void print();
     double getMod();
     ~CmplxNum();

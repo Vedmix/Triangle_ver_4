@@ -146,7 +146,6 @@ bool Fraction::operator==(const Fraction& frc)const{
 }
 
 
-
 void Fraction::fractionReduction(){
     if(down==0){
         return;
