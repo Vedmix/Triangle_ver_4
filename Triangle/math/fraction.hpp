@@ -1,3 +1,4 @@
+#include <string>
 #pragma once
 class Fraction
 {
@@ -31,4 +32,6 @@ public:
     int getDown() const;
     double fracToDouble();
 };
- 
+
+Fraction atoFrc(const char* str);
+Fraction atoFrc(const std::string& str);

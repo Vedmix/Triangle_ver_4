@@ -1,6 +1,7 @@
 #include <iostream>
 #include "fraction.hpp"
 #include "generalMathFunctions.hpp"
+#include <cstring>
 using namespace std;
 
 Fraction::Fraction(int n1, int n2)
@@ -253,3 +254,64 @@ int Fraction::getUp(){return up;}
 int Fraction::getDown(){return down;}
 int Fraction::getUp()const{return up;}
 int Fraction::getDown()const{return down;}
+
+
+Fraction atoFrc(const char* str){
+    bool flag=false;
+    int indexDown=0;
+    int up, down=1;
+    char* num = new char[12];
+    for(int k=0; k<strlen(str);k++){
+        if(str[k]=='/'){
+            flag=true;
+            indexDown=k+1;
+            break;
+        }
+        num[k]=str[k];
+        num[k+1]='\0';
+    }
+    up = stoi(num);
+    if(flag){
+        for(int k=indexDown; k<strlen(str);k++){
+            num[k-indexDown] = str[k];
+            num[k-indexDown+1]='\0';
+        }
+        down = stoi(num);
+    }
+    delete[] num;
+    if(down<0){
+        up*=-1;
+        down*=-1;
+    }
+    return Fraction(up, down);
+}
+
+Fraction atoFrc(const string& str){
+    bool flag=false;
+    int indexDown=0;
+    int up, down=1;
+    char* num = new char[12];
+    for(int k=0; k<str.length();k++){
+        if(str[k]=='/'){
+            flag=true;
+            indexDown=k+1;
+            break;
+        }
+        num[k]=str[k];
+        num[k+1]='\0';
+    }
+    up = stoi(num);
+    if(flag){
+        for(int k=indexDown; k<str.length();k++){
+            num[k-indexDown] = str[k];
+            num[k-indexDown+1]='\0';
+        }
+        down = stoi(num);
+    }
+    delete[] num;
+    if(down<0){
+        up*=-1;
+        down*=-1;
+    }
+    return Fraction(up, down);
+}
