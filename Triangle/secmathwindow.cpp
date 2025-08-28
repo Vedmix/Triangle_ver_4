@@ -1,5 +1,5 @@
-#include "secmathwindow.h"
-#include "mathresult.h"
+#include "secmathwindow.hpp"
+#include "mathresult.hpp"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -27,30 +27,35 @@ QWidget* SecondMathMenu::createMatrixWidget() {
     QWidget *widget = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(widget);
 
-    matrixButton1 = new QPushButton("Определитель / Ранг", widget);
-    matrixButton2 = new QPushButton("Транспонирование", widget);
-    matrixButton3 = new QPushButton("Обратная матрица", widget);
-    matrixButton4 = new QPushButton("Действия (*, +, -, *k)", widget);
+    matrixButton1 = new QPushButton("Нахождение определителя", widget);
+    matrixButton2 = new QPushButton("Нахождение обратной матрицы", widget);
+    matrixButton3 = new QPushButton("Математические операции", widget);
+    matrixButton4 = new QPushButton("Транспонирование матрицы", widget);
+    matrixButton5 = new QPushButton("Приведение к треугольному виду", widget);
 
     matrixButton1->setStyleSheet("font: bold 50px Arial; color: black;");
     matrixButton2->setStyleSheet("font: bold 50px Arial; color: black;");
     matrixButton3->setStyleSheet("font: bold 50px Arial; color: black;");
     matrixButton4->setStyleSheet("font: bold 50px Arial; color: black;");
+    matrixButton5->setStyleSheet("font: bold 50px Arial; color: black;");
 
-    matrixButton1->setFixedSize(800, 100);
-    matrixButton2->setFixedSize(800, 100);
-    matrixButton3->setFixedSize(800, 100);
-    matrixButton4->setFixedSize(800, 100);
+    matrixButton1->setFixedSize(900, 100);
+    matrixButton2->setFixedSize(900, 100);
+    matrixButton3->setFixedSize(900, 100);
+    matrixButton4->setFixedSize(900, 100);
+    matrixButton5->setFixedSize(900, 100);
 
     connect(matrixButton1, &QPushButton::clicked, this, &SecondMathMenu::openMathResult);
     connect(matrixButton2, &QPushButton::clicked, this, &SecondMathMenu::openMathResult);
     connect(matrixButton3, &QPushButton::clicked, this, &SecondMathMenu::openMathResult);
     connect(matrixButton4, &QPushButton::clicked, this, &SecondMathMenu::openMathResult);
+    connect(matrixButton5, &QPushButton::clicked, this, &SecondMathMenu::openMathResult);
 
     layout->addWidget(matrixButton1);
     layout->addWidget(matrixButton2);
     layout->addWidget(matrixButton3);
     layout->addWidget(matrixButton4);
+    layout->addWidget(matrixButton5);
     layout->setAlignment(Qt::AlignCenter);
 
     widget->setLayout(layout);
@@ -61,18 +66,25 @@ void SecondMathMenu::openMathResult() {
     QPushButton *button = qobject_cast<QPushButton*>(sender());
     if (!button) return;
 
-    int index = 0;
+    int operationType = -1;
+
     if (button == matrixButton1) {
-        index = 0; // Определитель / Ранг
+        operationType = 0; // Определитель
     } else if (button == matrixButton2) {
-        index = 1; // Транспонирование
+        operationType = 1; // Обратная матрица
     } else if (button == matrixButton3) {
-        index = 2; // Обратная матрица
+        operationType = 2; // Математические операции
     } else if (button == matrixButton4) {
-        index = 3; // Действия с матрицами
+        operationType = 3; // Транспонирование
+    } else if (button == matrixButton5) {
+        operationType = 4; // Треугольный вид
     }
 
-    MathResult *mathResult = new MathResult(index);
+    if (operationType != -1) {
+        emit matrixOperationSelected(operationType);
+    }
+
+    MathResult *mathResult = new MathResult(operationType);
     mathResult->show();
     this->close();
 }

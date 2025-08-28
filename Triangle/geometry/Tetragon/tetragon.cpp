@@ -1,4 +1,4 @@
-#include "tetragon.h"
+#include "tetragon.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>

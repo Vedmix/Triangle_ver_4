@@ -12,14 +12,14 @@
 #include <QPushButton>
 #include <QScreen>
 #include <QSpinBox>
-#include "math/matrix.h"
+#include "math/matrix.hpp"
 
 class MathResult : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MathResult(int contentIndex = 0, QWidget *parent = nullptr);
+    explicit MathResult(int operationType = 0, QWidget *parent = nullptr);
     ~MathResult() = default;
 
 protected:
@@ -30,23 +30,24 @@ private slots:
     void processMatrix();
 
 private:
+    int currentOperationType;
     QStackedWidget *stackedWidget;
-
-    QWidget* createDeterminatorRank();
-    QWidget* createTranspose();
-    QWidget* createInverseMatrix();
-    QWidget* createMatrixOperations();
-    QString matrixToString(Matrix& matrix) const;
-    void ImplataMatrixSize();
-
     QGridLayout* matrixLayout;
     QLabel* resultLabel;
-    QLabel* determinantLabel;
     QPushButton* processButton;
     QSpinBox* rowSpin;
     QSpinBox* colSpin;
 
+    QString matrixToString(Matrix& matrix) const;
+    void setupMatrixSize();
     void clearLayout();
+    void setupOperationInterface();
+
+    QString processDeterminant(Matrix& matrix);
+    QString processInverseMatrix(Matrix& matrix);
+    QString processMatrixOperations(Matrix& matrix);
+    QString processTranspose(Matrix& matrix);
+    QString processTriangleForm(Matrix& matrix);
 };
 
 #endif

@@ -1,4 +1,4 @@
-#include "mathresult.h"
+#include "mathresult.hpp"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
@@ -7,8 +7,9 @@
 #include <QKeyEvent>
 #include <QSpacerItem>
 
-MathResult::MathResult(int contentIndex, QWidget *parent)
+MathResult::MathResult(int operationType, QWidget *parent)
     : QWidget(parent),
+      currentOperationType(operationType),
       stackedWidget(new QStackedWidget(this)),
       resultLabel(new QLabel("Введите матрицу и нажмите кнопку", this)),
       processButton(new QPushButton("Показать матрицу", this)),
@@ -82,36 +83,30 @@ MathResult::MathResult(int contentIndex, QWidget *parent)
     connect(processButton, &QPushButton::clicked,
             this, &MathResult::processMatrix);
 
+    setupOperationInterface();
     updateMatrixSize();
     showFullScreen();
 }
 
-QWidget* MathResult::createDeterminatorRank() {
-    QWidget *widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(widget);
-    layout->addWidget(new QLabel("Определитель / Ранг матрицы (в разработке)"));
-    return widget;
-}
-
-QWidget* MathResult::createTranspose() {
-    QWidget *widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(widget);
-    layout->addWidget(new QLabel("Транспонирование матрицы (в разработке)"));
-    return widget;
-}
-
-QWidget* MathResult::createInverseMatrix() {
-    QWidget *widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(widget);
-    layout->addWidget(new QLabel("Обратная матрица (в разработке)"));
-    return widget;
-}
-
-QWidget* MathResult::createMatrixOperations() {
-    QWidget *widget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(widget);
-    layout->addWidget(new QLabel("Действия с матрицами (*, +, -, *k) (в разработке)"));
-    return widget;
+void MathResult::setupOperationInterface() {
+    switch (currentOperationType) {
+    case 0: // Определитель
+        processButton->setText("Вычислить определитель");
+        break;
+    case 1: // Обратная матрица
+        processButton->setText("Найти обратную матрицу");
+        colSpin->setValue(rowSpin->value()); // Для квадратной матрицы
+        break;
+    case 2: // Операции
+        processButton->setText("Выполнить операции");
+        break;
+    case 3: // Транспонирование
+        processButton->setText("Транспонировать");
+        break;
+    case 4: // Треугольный вид
+        processButton->setText("Привести к треугольному виду");
+        break;
+    }
 }
 
 QString MathResult::matrixToString(Matrix& matrix) const {
@@ -138,25 +133,10 @@ QString MathResult::matrixToString(Matrix& matrix) const {
         }
         result += "\n";
     }
-
-    if (rows == cols) {
-        try {
-            Fraction det = matrix.determinant();
-            result += "\nОпределитель: ";
-            if (det.getDown() == 1) {
-                result += QString::number(det.getUp());
-            } else {
-                result += QString::number(det.getUp()) + "/" + QString::number(det.getDown());
-            }
-        } catch (...) {
-            result += "\nОпределителя нет!";
-        }
-    }
-
     return result;
 }
 
-void MathResult::ImplataMatrixSize() {
+void MathResult::setupMatrixSize() {
     clearLayout();
     int rows = rowSpin->value();
     int cols = colSpin->value();
@@ -171,7 +151,6 @@ void MathResult::ImplataMatrixSize() {
         }
     }
 }
-
 
 void MathResult::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
@@ -188,9 +167,8 @@ void MathResult::keyPressEvent(QKeyEvent *event) {
     QWidget::keyPressEvent(event);
 }
 
-
 void MathResult::updateMatrixSize() {
-    ImplataMatrixSize();
+    setupMatrixSize();
 }
 
 void MathResult::processMatrix() {
@@ -219,8 +197,86 @@ void MathResult::processMatrix() {
         }
     }
 
-    resultLabel->setText(matrixToString(matrix));
+    QString resultText;
+
+    switch (currentOperationType) {
+    case 0: // Определитель
+        resultText = processDeterminant(matrix);
+        break;
+    case 1: // Обратная матрица
+        resultText = processInverseMatrix(matrix);
+        break;
+    case 2: // Операции
+        resultText = processMatrixOperations(matrix);
+        break;
+    case 3: // Транспонирование
+        resultText = processTranspose(matrix);
+        break;
+    case 4: // Треугольный вид
+        resultText = processTriangleForm(matrix);
+        break;
+    }
+
+    resultLabel->setText(resultText);
     resultLabel->setAlignment(Qt::AlignCenter);
+}
+
+QString MathResult::processDeterminant(Matrix& matrix) {
+    if (matrix.getRows() != matrix.getCols()) {
+        return "Ошибка: матрица должна быть квадратной для вычисления определителя!";
+    }
+
+    try {
+        Fraction det = matrix.determinant();
+        QString result = "Матрица:\n" + matrixToString(matrix);
+        result += "\nОпределитель: ";
+        if (det.getDown() == 1) {
+            result += QString::number(det.getUp());
+        } else {
+            result += QString::number(det.getUp()) + "/" + QString::number(det.getDown());
+        }
+        return result;
+    } catch (...) {
+        return "Ошибка при вычислении определителя!";
+    }
+}
+
+QString MathResult::processInverseMatrix(Matrix& matrix) {
+    if (matrix.getRows() != matrix.getCols()) {
+        return "Ошибка: матрица должна быть квадратной!";
+    }
+
+    try {
+        Matrix* inverse = matrix.inverseMatrix();
+        if (inverse) {
+            QString result = "Исходная матрица:\n" + matrixToString(matrix);
+            result += "\n\nОбратная матрица:\n" + matrixToString(*inverse);
+            delete inverse;
+            return result;
+        }
+        return "Обратной матрицы не существует!";
+    } catch (...) {
+        return "Ошибка при вычислении обратной матрицы!";
+    }
+}
+
+QString MathResult::processTranspose(Matrix& matrix) {
+    Matrix transposed = matrix.transpose();
+    QString result = "Исходная матрица:\n" + matrixToString(matrix);
+    result += "\n\nТранспонированная матрица:\n" + matrixToString(transposed);
+    return result;
+}
+
+QString MathResult::processTriangleForm(Matrix& matrix) {
+    Matrix* triangle = matrix.triangleMatrix();
+    QString result = "Исходная матрица:\n" + matrixToString(matrix);
+    result += "\n\nТреугольная форма:\n" + matrixToString(*triangle);
+    delete triangle;
+    return result;
+}
+
+QString MathResult::processMatrixOperations(Matrix& matrix) {
+    return "Операции с матрицами (в разработке):\n" + matrixToString(matrix);
 }
 
 void MathResult::clearLayout() {

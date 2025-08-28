@@ -24,20 +24,20 @@ SOURCES += \
     secmathwindow.cpp \
 
 HEADERS += \
-    geometry/Tetragon/tetragon.h \
-    geometry/Tetragon/tetragongraphic.h \
-    geometry/Triangle/triangle.h \
-    geometry/Triangle/trianglegraphic.h \
-    math/matrix.h \
-    math/fraction.h \
-    math/generalMathFunctions.h \
-    geometryresult.h \
-    geometrywindow.h \
-    mainwindow.h \
-    math/vectors.h \
-    mathresult.h \
-    mathwindow.h \
-    secmathwindow.h \
+    geometry/Tetragon/tetragon.hpp \
+    geometry/Tetragon/tetragongraphic.hpp \
+    geometry/Triangle/triangle.hpp \
+    geometry/Triangle/trianglegraphic.hpp \
+    math/matrix.hpp \
+    math/fraction.hpp \
+    math/generalMathFunctions.hpp \
+    geometryresult.hpp \
+    geometrywindow.hpp \
+    mainwindow.hpp \
+    math/vectors.hpp \
+    mathresult.hpp \
+    mathwindow.hpp \
+    secmathwindow.hpp \
 
 FORMS += \
     mainwindow.ui

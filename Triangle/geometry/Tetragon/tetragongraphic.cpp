@@ -1,4 +1,4 @@
-#include "tetragongraphic.h"
+#include "tetragongraphic.hpp"
 #include <cmath>
 
 TetragonGraphic::TetragonGraphic(QWidget *parent)

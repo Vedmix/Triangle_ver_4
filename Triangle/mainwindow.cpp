@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "mathwindow.h"
-#include "geometrywindow.h"
+#include "mainwindow.hpp"
+#include "mathwindow.hpp"
+#include "geometrywindow.hpp"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QApplication>

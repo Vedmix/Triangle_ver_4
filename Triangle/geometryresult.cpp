@@ -1,4 +1,4 @@
-#include "geometryresult.h"
+#include "geometryresult.hpp"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>

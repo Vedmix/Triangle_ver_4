@@ -1,4 +1,4 @@
-#include "triangle.h"
+#include "triangle.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>

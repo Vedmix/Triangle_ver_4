@@ -8,10 +8,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QFormLayout>
-#include "geometry/Triangle/trianglegraphic.h"
-#include "geometry/Triangle/triangle.h"
-#include "geometry/Tetragon/tetragongraphic.h"
-#include "geometry/Tetragon/tetragon.h"
+#include "geometry/Triangle/trianglegraphic.hpp"
+#include "geometry/Triangle/triangle.hpp"
+#include "geometry/Tetragon/tetragongraphic.hpp"
+#include "geometry/Tetragon/tetragon.hpp"
 
 class GeometryResult : public QWidget
 {

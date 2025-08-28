@@ -1,5 +1,5 @@
-#include "geometrywindow.h"
-#include "geometryresult.h"
+#include "geometrywindow.hpp"
+#include "geometryresult.hpp"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QScreen>

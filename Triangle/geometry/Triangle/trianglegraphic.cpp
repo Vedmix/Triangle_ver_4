@@ -1,4 +1,4 @@
-#include "trianglegraphic.h"
+#include "trianglegraphic.hpp"
 #include <cmath>
 
 TriangleGraphic::TriangleGraphic(QWidget *parent)

@@ -23,9 +23,13 @@ private:
     QPushButton *matrixButton2;
     QPushButton *matrixButton3;
     QPushButton *matrixButton4;
+    QPushButton *matrixButton5;
 
     QWidget *createMatrixWidget();
     QWidget *createComplexNumbersWidget();
+
+signals:
+    void matrixOperationSelected(int operationType);
 };
 
 #endif

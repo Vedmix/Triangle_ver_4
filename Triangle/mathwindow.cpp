@@ -1,5 +1,5 @@
-#include "mathwindow.h"
-#include "secmathwindow.h"
+#include "mathwindow.hpp"
+#include "secmathwindow.hpp"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QScreen>
