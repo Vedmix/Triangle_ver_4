@@ -14,7 +14,10 @@ MathResult::MathResult(int operationType, QWidget *parent)
       resultLabel(new QLabel("Введите матрицу и нажмите кнопку", this)),
       processButton(new QPushButton("Показать матрицу", this)),
       rowSpin(new QSpinBox(this)),
-      colSpin(new QSpinBox(this))
+      colSpin(new QSpinBox(this)),
+      rowSpin2(new QSpinBox(this)),
+      colSpin2(new QSpinBox(this)),
+      matrix2Widget(new QWidget(this))
 {
     setStyleSheet(R"(
         QWidget {
@@ -31,63 +34,121 @@ MathResult::MathResult(int operationType, QWidget *parent)
         }
     )");
 
+    //основной Layout
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
 
     QWidget* centerWrapper = new QWidget(this);
     QVBoxLayout* wrapperLayout = new QVBoxLayout(centerWrapper);
     wrapperLayout->setAlignment(Qt::AlignCenter);
-
+    
+    //контроль первой матрицы
     QHBoxLayout* controlLayout = new QHBoxLayout();
     controlLayout->setAlignment(Qt::AlignCenter);
 
-    QLabel* rowsLabel = new QLabel("Строки:", this);
-    rowsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    QLabel* rowsLabel = new QLabel("Строки A:", this);
+    QLabel* colsLabel = new QLabel("Столбцы A:", this);
+    
     controlLayout->addWidget(rowsLabel);
-
-    rowSpin->setFixedWidth(60);
     controlLayout->addWidget(rowSpin);
-
-    QLabel* colsLabel = new QLabel("Столбцы:", this);
-    colsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     controlLayout->addWidget(colsLabel);
-
-    colSpin->setFixedWidth(60);
     controlLayout->addWidget(colSpin);
-
-    controlLayout->insertStretch(0, 1);
-    controlLayout->addStretch(1);
-
+    
+    //общий Layout
+    QHBoxLayout* matricesLayout = new QHBoxLayout();
+    matricesLayout->setAlignment(Qt::AlignCenter);
+    
+    //первая матрица 
+    QWidget* matrix1Widget = new QWidget();
+    QVBoxLayout* matrix1Layout = new QVBoxLayout(matrix1Widget);
+    matrix1Layout->addLayout(controlLayout);
+    
     matrixLayout = new QGridLayout();
+    matrixLayout->setSpacing(15);
+    matrixLayout->setHorizontalSpacing(20);
+    matrixLayout->setVerticalSpacing(15);
     matrixLayout->setAlignment(Qt::AlignCenter);
 
+    matrix1Layout->addLayout(matrixLayout);
+    matricesLayout->addWidget(matrix1Widget);
+
+    //вторая матрица
+    QVBoxLayout* matrix2MainLayout = new QVBoxLayout(matrix2Widget);
+
+    QHBoxLayout* controlLayout2 = new QHBoxLayout();
+    controlLayout2->setAlignment(Qt::AlignCenter);
+
+    QLabel* rowsLabel2 = new QLabel("Строки B:", this);
+    QLabel* colsLabel2 = new QLabel("Столбцы B:", this);
+    
+    controlLayout2->addWidget(rowsLabel2);
+    controlLayout2->addWidget(rowSpin2);
+    controlLayout2->addWidget(colsLabel2);
+    controlLayout2->addWidget(colSpin2);
+    
+    matrixLayout2 = new QGridLayout();
+    matrixLayout2->setSpacing(15);
+    matrixLayout2->setHorizontalSpacing(20);
+    matrixLayout2->setVerticalSpacing(15);
+    matrixLayout2->setAlignment(Qt::AlignCenter);
+
+    matrix2MainLayout->addLayout(controlLayout2);
+    matrix2MainLayout->addLayout(matrixLayout2);
+    
+    matricesLayout->addWidget(matrix2Widget);
+    
+    //настройка спинов
     rowSpin->setRange(1, 10);
     colSpin->setRange(1, 10);
-    rowSpin->setValue(3);
-    colSpin->setValue(3);
-
+    rowSpin->setValue(2);
+    colSpin->setValue(2);
+    
+    rowSpin2->setRange(1, 10);
+    colSpin2->setRange(1, 10);
+    rowSpin2->setValue(2);
+    colSpin2->setValue(2);
+    
     resultLabel->setAlignment(Qt::AlignCenter);
-    resultLabel->setMinimumWidth(400);
-
-    wrapperLayout->addLayout(controlLayout);
-    wrapperLayout->addLayout(matrixLayout);
+    resultLabel->setMinimumWidth(600);
+    
+    wrapperLayout->addLayout(matricesLayout);
     wrapperLayout->addWidget(processButton, 0, Qt::AlignCenter);
     wrapperLayout->addWidget(resultLabel);
-
+    
     mainLayout->addWidget(centerWrapper);
+    
+    setupMatrixSize(matrixLayout, rowSpin->value(), colSpin->value());
+    setupMatrixSize(matrixLayout2, rowSpin2->value(), colSpin2->value());
 
+    resultLabel->setAlignment(Qt::AlignCenter);
+    resultLabel->setMinimumWidth(600);
+    
+    // подключение сигналов
     connect(rowSpin, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &MathResult::updateMatrixSize);
+            this,[this]() {setupMatrixSize(matrixLayout,
+                           rowSpin->value(), colSpin->value());});
     connect(colSpin, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &MathResult::updateMatrixSize);
+            this,[this]() {setupMatrixSize(matrixLayout,
+                           rowSpin->value(), colSpin->value());});
+    connect(rowSpin2, QOverload<int>::of(&QSpinBox::valueChanged),
+            this,[this]() {setupMatrixSize(matrixLayout2,
+                           rowSpin2->value(), colSpin2->value());});
+    connect(colSpin2, QOverload<int>::of(&QSpinBox::valueChanged),
+            this,[this]() {setupMatrixSize(matrixLayout2,
+                           rowSpin2->value(), colSpin2->value());});
     connect(processButton, &QPushButton::clicked,
-            this, &MathResult::processMatrix);
+            this,&MathResult::processMatrix);
 
     setupOperationInterface();
-    updateMatrixSize();
+    updateInterface();
     showFullScreen();
 }
-
+void MathResult::updateInterface(){
+    bool showSecondMatrix = (currentOperationType == 2);
+    matrix2Widget->setVisible(showSecondMatrix);
+    
+    setupOperationInterface();
+}
 void MathResult::setupOperationInterface() {
     switch (currentOperationType) {
     case 0: // Определитель
@@ -136,22 +197,24 @@ QString MathResult::matrixToString(Matrix& matrix) const {
     return result;
 }
 
-void MathResult::setupMatrixSize() {
-    clearLayout();
-    int rows = rowSpin->value();
-    int cols = colSpin->value();
+void MathResult::setupMatrixSize(QGridLayout* gridLayout, int rows, int cols) {
+    clearLayout(gridLayout);
+
+    gridLayout->setSpacing(15);
+    gridLayout->setHorizontalSpacing(20);
+    gridLayout->setVerticalSpacing(15);
+    gridLayout->setAlignment(Qt::AlignCenter);
 
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
             QLineEdit* edit = new QLineEdit(this);
             edit->setAlignment(Qt::AlignCenter);
             edit->setText("0");
-            edit->setMaximumWidth(60);
-            matrixLayout->addWidget(edit, r, c);
+            edit->setFixedSize(70, 35);
+            gridLayout->addWidget(edit, r, c);
         }
     }
 }
-
 void MathResult::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape) {
         if (isFullScreen()) {
@@ -167,58 +230,52 @@ void MathResult::keyPressEvent(QKeyEvent *event) {
     QWidget::keyPressEvent(event);
 }
 
-void MathResult::updateMatrixSize() {
-    setupMatrixSize();
+void MathResult::processMatrix() {
+    Matrix matrix1 = readMatrixFromLayout(matrixLayout,
+    rowSpin->value(), colSpin->value());
+    QString resultText;
+
+    switch(currentOperationType){
+    case 0:
+        resultText = processDeterminant(matrix1);
+        break;
+    case 1:
+        resultText = processInverseMatrix(matrix1);
+        break;
+    case 2:
+        {
+            Matrix matrix2 = readMatrixFromLayout(matrixLayout2,
+            rowSpin2->value(), colSpin2->value());
+            resultText = processMatrixOperations(matrix1, matrix2);
+        }
+        break;
+    case 3:
+        resultText = processTranspose(matrix1);
+        break;
+    case 4:
+        resultText = processTriangleForm(matrix1);
+        break;
+    }
+
+    resultLabel->setText(resultText);
+    resultLabel->setAlignment(Qt::AlignCenter);
 }
 
-void MathResult::processMatrix() {
-    int rows = rowSpin->value();
-    int cols = colSpin->value();
-
+Matrix MathResult::readMatrixFromLayout(QGridLayout* layout, int rows, int cols){
     Matrix matrix(rows, cols);
-
-    for (int r = 0; r < rows; ++r) {
-        for (int c = 0; c < cols; ++c) {
-            QLayoutItem* item = matrixLayout->itemAtPosition(r, c);
+    for (int r = 0; r < rows; ++r){
+        for (int c = 0; c < cols; ++c){
+            QLayoutItem* item = layout->itemAtPosition(r, c);
             if (!item || !item->widget()) continue;
 
             QLineEdit* edit = qobject_cast<QLineEdit*>(item->widget());
             if (!edit) continue;
 
             QString text = edit->text();
-            if (text.contains('/')) {
-                QStringList parts = text.split('/');
-                if (parts.size() == 2) {
-                    matrix(r, c) = Fraction(parts[0].toInt(), parts[1].toInt());
-                }
-            } else {
-                matrix(r, c) = Fraction(text.toInt(), 1);
-            }
+            matrix(r, c) = atoFrc(text.toStdString());
         }
     }
-
-    QString resultText;
-
-    switch (currentOperationType) {
-    case 0: // Определитель
-        resultText = processDeterminant(matrix);
-        break;
-    case 1: // Обратная матрица
-        resultText = processInverseMatrix(matrix);
-        break;
-    case 2: // Операции
-        resultText = processMatrixOperations(matrix);
-        break;
-    case 3: // Транспонирование
-        resultText = processTranspose(matrix);
-        break;
-    case 4: // Треугольный вид
-        resultText = processTriangleForm(matrix);
-        break;
-    }
-
-    resultLabel->setText(resultText);
-    resultLabel->setAlignment(Qt::AlignCenter);
+    return matrix;
 }
 
 QString MathResult::processDeterminant(Matrix& matrix) {
@@ -275,13 +332,75 @@ QString MathResult::processTriangleForm(Matrix& matrix) {
     return result;
 }
 
-QString MathResult::processMatrixOperations(Matrix& matrix) {
-    return "Операции с матрицами (в разработке):\n" + matrixToString(matrix);
+QString MathResult::processMatrixOperations(Matrix& matrix1, Matrix& matrix2) {
+    QString result;
+
+
+    result += "A: " + QString::number(matrix1.getRows()) + "x" + QString::number(matrix1.getCols());
+    result += "    ";
+    result += "B: " + QString::number(matrix2.getRows()) + "x" + QString::number(matrix2.getCols());
+
+    int maxRows = std::max(matrix1.getRows(), matrix2.getRows());
+
+
+    for (int r = 0; r < maxRows; ++r) {
+        // Строка матрицы A
+        if (r < matrix1.getRows()) {
+            result += "[ ";
+            for (int c = 0; c < matrix1.getCols(); ++c) {
+                Fraction frac = matrix1(r, c);
+                if (frac.getDown() == 1) {
+                    result += QString::number(frac.getUp());
+                } else {
+                    if (frac.getUp() < 0 || frac.getDown() < 0) {
+                        result += "-" + QString::number(abs(frac.getUp())) + "/" + QString::number(abs(frac.getDown()));
+                    } else {
+                        result += QString::number(frac.getUp()) + "/" + QString::number(frac.getDown());
+                    }
+                }
+                result += "\t";
+            }
+            result += "]";
+        } else {
+            // Пустое место если строк в матрице A меньше
+            result += QString(" ").repeated(matrix1.getCols() * 8);
+        }
+
+        // Разделитель между матрицами
+        result += "    "; // Отступ между матрицами
+
+        // Строка матрицы B
+        if (r < matrix2.getRows()) {
+            result += "[ ";
+            for (int c = 0; c < matrix2.getCols(); ++c) {
+                Fraction frac = matrix2(r, c);
+                if (frac.getDown() == 1) {
+                    result += QString::number(frac.getUp());
+                } else {
+                    if (frac.getUp() < 0 || frac.getDown() < 0) {
+                        result += "-" + QString::number(abs(frac.getUp())) + "/" + QString::number(abs(frac.getDown()));
+                    } else {
+                        result += QString::number(frac.getUp()) + "/" + QString::number(frac.getDown());
+                    }
+                }
+                result += "\t";
+            }
+            result += "]";
+        }
+
+        result += "\n";
+    }
+
+
+    result += "\n\nОперации с матрицами (в разработке)";
+    return result;
 }
 
-void MathResult::clearLayout() {
+void MathResult::clearLayout(QLayout* layout) {
+    if (!layout) return;
+
     QLayoutItem* item;
-    while ((item = matrixLayout->takeAt(0))) {
+    while ((item = layout->takeAt(0))) {
         if (item->widget()) {
             delete item->widget();
         }

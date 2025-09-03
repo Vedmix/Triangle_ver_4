@@ -26,28 +26,35 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
-    void updateMatrixSize();
     void processMatrix();
 
 private:
     int currentOperationType;
+
     QStackedWidget *stackedWidget;
     QGridLayout* matrixLayout;
+    QGridLayout* matrixLayout2;
     QLabel* resultLabel;
     QPushButton* processButton;
     QSpinBox* rowSpin;
     QSpinBox* colSpin;
+    QSpinBox* rowSpin2;
+    QSpinBox* colSpin2;
+    QWidget* matrix2Widget;
 
     QString matrixToString(Matrix& matrix) const;
-    void setupMatrixSize();
-    void clearLayout();
+    void setupMatrixSize(QGridLayout* gridLayout, int rows, int cols);
+    void clearLayout(QLayout* layout);
     void setupOperationInterface();
+    void updateInterface();
 
     QString processDeterminant(Matrix& matrix);
     QString processInverseMatrix(Matrix& matrix);
-    QString processMatrixOperations(Matrix& matrix);
+    QString processMatrixOperations(Matrix& matrix1, Matrix& matrix2);
     QString processTranspose(Matrix& matrix);
     QString processTriangleForm(Matrix& matrix);
+
+    Matrix readMatrixFromLayout(QGridLayout* layout, int rows, int cols);
 };
 
 #endif
