@@ -3,6 +3,7 @@
 #include "fraction.hpp"
 #include "vectors.hpp"
 
+
 int foundGCD(int a, int b); //Поиск Наибольщего общего делителя
 int foundLCM(int a, int b); //Поиск Наименьшего общего кратного
 Fraction* substructVectors(Fraction* vec1, Fraction* vec2, int n);
